@@ -12,6 +12,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = ui[lang];
 const items = await listProjects(lang);
+const previewDesc = items && items.length ? items[0].data.description : '';
 ---
 
 <BaseLayout lang={lang} title={`${t.projects.title} — ${t.metaTitle}`}>
@@ -46,6 +47,35 @@ const items = await listProjects(lang);
         })
       }
     </div>
+
+    <!-- CTA minimalista e interactivo -->
+    <section class="cta-minimal" aria-labelledby="cta-minimal-title" data-preview-desc={previewDesc}>
+      <div class="cta-minimal__inner">
+        <div>
+          <h3 id="cta-minimal-title" class="cta-minimal__title">¿Quieres ver más?</h3>
+          <p class="cta-minimal__lead">Explora más proyectos en mi Behance.</p>
+        </div>
+
+            <div class="cta-minimal__controls">
+              <Button
+                variant="primary"
+                href="https://www.behance.net/tu-perfil"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Ver más proyectos en Behance (abre en nueva pestaña)"
+              >
+                <!-- Behance inline SVG (Bē logo) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:middle;margin-right:8px">
+                  <rect width="24" height="24" fill="none" />
+                  <text x="0" y="16" font-family="Inter, system-ui, -apple-system, 'Helvetica Neue', Arial" font-weight="700" font-size="14" fill="currentColor">Bē</text>
+                </svg>
+                Ver en Behance
+              </Button>
+            </div>
+
+        <div id="cta-extra" class="cta-minimal__extra" hidden aria-live="polite"></div>
+      </div>
+    </section>
   </div>
 </BaseLayout>
 
@@ -78,4 +108,88 @@ const items = await listProjects(lang);
       grid-template-columns: 1fr;
     }
   }
+  /* CTA minimalista */
+  .cta-minimal {
+    margin: 3.5rem auto 0 auto;
+    max-width: 56rem;
+  }
+  .cta-minimal__inner {
+    display: flex;
+    gap: var(--space-lg);
+    align-items: center;
+    justify-content: space-between;
+    background: color-mix(in oklab, var(--bg) 94%, var(--bg-offset));
+    padding: calc(var(--space-lg) * 1.2);
+    border-radius: 1.25rem;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.04);
+    flex-wrap: wrap;
+  }
+  .cta-minimal__title {
+    margin: 0 0 0.25rem 0;
+    font-family: var(--font-serif, serif);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .cta-minimal__lead {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.98rem;
+  }
+  .cta-minimal__controls {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+  }
+  .cta-minimal__toggle {
+    padding: 0.5rem 0.75rem;
+    border-radius: 999px;
+  }
+  .cta-minimal__extra {
+    width: 100%;
+    margin-top: var(--space-md);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    transition: max-height 0.2s ease, opacity 0.18s ease;
+  }
+  .cta-minimal__extra-text { margin: 0; }
+  @media (min-width: 48rem) {
+    .cta-minimal__inner { flex-wrap: nowrap; }
+    .cta-minimal__extra { margin-top: 0; margin-left: var(--space-lg); max-width: 36rem; }
+  }
 </style>
+
+<script>
+  // Toggle extra content: use preview description embedded in section
+  const section = document.querySelector('.cta-minimal');
+  const extra = document.getElementById('cta-extra');
+  const title = document.getElementById('cta-minimal-title');
+  if (section && title && extra) {
+    const preview = section.getAttribute('data-preview-desc') || '';
+    function openExtra() {
+      extra.hidden = false;
+      extra.innerHTML = `<p class="cta-minimal__extra-text">${preview}</p>`;
+      extra.animate([{opacity:0, transform:'translateY(-6px)'},{opacity:1, transform:'translateY(0)'}], {duration:220, easing:'cubic-bezier(.2,.9,.2,1)'});
+      title.setAttribute('aria-expanded','true');
+    }
+    function closeExtra() {
+      const a = extra.animate([{opacity:1, transform:'translateY(0)'},{opacity:0, transform:'translateY(-6px)'}], {duration:180, easing:'cubic-bezier(.2,.9,.2,1)'});
+      a.onfinish = () => { extra.hidden = true; extra.innerHTML = ''; };
+      title.removeAttribute('aria-expanded');
+    }
+    let open = false;
+    title.style.cursor = 'pointer';
+    title.tabIndex = 0;
+    title.addEventListener('click', () => {
+      open = !open;
+      open ? openExtra() : closeExtra();
+    });
+    title.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        open = !open;
+        open ? openExtra() : closeExtra();
+      }
+    });
+  }
+</script>
