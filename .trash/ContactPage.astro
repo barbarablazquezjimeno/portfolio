@@ -1,5 +1,6 @@
----
+// Componente eliminado
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/Button.astro';
 import { ui, type Locale } from '@/i18n/ui';
 import { contactEmail, social } from '@/data/site';
 
@@ -20,9 +21,9 @@ const copyLabel = `${t.a11y.copyEmailFor} (${contactEmail})`;
     <p class="contact__email">
       <a href={`mailto:${contactEmail}`} aria-label={mailLabel}>{contactEmail}</a>
     </p>
-    <button
+    <Button
       type="button"
-      class="btn"
+      variant="primary"
       id="copy-email"
       data-email={contactEmail}
       data-copied={t.contact.copied}
@@ -30,41 +31,9 @@ const copyLabel = `${t.a11y.copyEmailFor} (${contactEmail})`;
       aria-describedby="contact-intro"
     >
       {t.contact.copyEmail}
-    </button>
+    </Button>
     <p id="copy-feedback" class="sr-only" aria-live="polite" aria-atomic="true"></p>
-    {
-      social.linkedin || social.behance ? (
-        <>
-          <h2 class="contact__subhead">{t.contact.socialHeading}</h2>
-          <ul class="contact__social">
-            {social.linkedin ? (
-              <li>
-                <a
-                  href={social.linkedin}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  aria-label={`LinkedIn (${t.a11y.externalLink})`}
-                >
-                  LinkedIn
-                </a>
-              </li>
-            ) : null}
-            {social.behance ? (
-              <li>
-                <a
-                  href={social.behance}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  aria-label={`Behance (${t.a11y.externalLink})`}
-                >
-                  Behance
-                </a>
-              </li>
-            ) : null}
-          </ul>
-        </>
-      ) : null
-    }
+    {/* Sección de redes sociales eliminada por solicitud */}
   </section>
 </BaseLayout>
 
@@ -115,25 +84,7 @@ const copyLabel = `${t.a11y.copyEmailFor} (${contactEmail})`;
     text-decoration: none;
   }
 
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: var(--tap-min);
-    padding: 0.65rem 1.25rem;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 1rem;
-    border: 1px solid var(--border);
-    background: var(--bg-elevated);
-    color: var(--text);
-    cursor: pointer;
-  }
 
-  .btn:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
 
   .contact__subhead {
     margin: var(--space-xl) 0 var(--space-sm);

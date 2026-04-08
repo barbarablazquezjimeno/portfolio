@@ -2,6 +2,7 @@
   "metaTitle": "Portfolio — Product Designer",
   "metaDescription": "Case studies and experience as a product designer.",
   "nav": {
+    "logo": "Portfolio",
     "home": "Home",
     "projects": "Projects",
     "about": "About",
@@ -19,6 +20,11 @@
     "title": "Projects",
     "intro": "Case studies. Edit or add files under content/projects/en/.",
     "back": "Back to home"
+  },
+  "projectDetail": {
+    "problem": "Problem",
+    "solution": "Solution",
+    "tools": "Tools"
   },
   "about": {
     "title": "About"
@@ -58,7 +64,7 @@
     "notFoundHomeEs": "",
     "notFoundHomeEn": "Go to English home",
     "notFoundNavLabel": "Home links by language",
-    "viewCaseInEnglish": "",
+    "viewCaseInEnglish": "View this case in English",
     "viewCaseInSpanish": "View this case in Spanish"
   }
 }

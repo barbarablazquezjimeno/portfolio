@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import ProjectCard from '@/components/ProjectCard.astro';
+import Button from '@/components/Button.astro';
+import ProjectCardPreview from '@/components/ProjectCardPreview.astro';
 import { ui, pathForLocale, projectDetailPath, type Locale } from '@/i18n/ui';
 import { listProjects, projectSlugFromId } from '@/lib/projects';
 
@@ -15,47 +16,35 @@ const showcase = featured.length > 0 ? featured : (await listProjects(lang)).sli
 ---
 
 <BaseLayout lang={lang} title={t.metaTitle} description={t.metaDescription}>
-  <div class="shell">
+  <div class="shell hero-container">
     <section class="hero" aria-labelledby="hero-title">
       <p class="hero__kicker">{t.home.kicker}</p>
       <h1 id="hero-title" class="hero__title">{t.home.headline}</h1>
       <p class="hero__sub">{t.home.sub}</p>
       <div class="hero__actions">
-        <a class="btn btn--primary" href={pathForLocale(lang, 'projects')}>{t.home.ctaProjects}</a>
-        <a class="btn btn--ghost" href={pathForLocale(lang, 'contact')}>{t.home.ctaContact}</a>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="feat-title">
-      <div class="section__head">
-        <h2 id="feat-title" class="section__title">{t.home.featured}</h2>
-      </div>
-      <div class="grid">
-        {
-          showcase.map((p) => {
-            const slug = projectSlugFromId(p.id, lang);
-            return (
-              <ProjectCard
-                href={projectDetailPath(lang, slug)}
-                title={p.data.title}
-                description={p.data.description}
-                date={p.data.date}
-                cover={p.data.cover}
-                coverAlt={p.data.coverAlt}
-                viewCaseLabel={t.a11y.viewCase}
-              />
-            );
-          })
-        }
+        <Button variant="primary" href={pathForLocale(lang, 'projects')}>
+          {t.home.ctaProjects}
+        </Button>
       </div>
     </section>
   </div>
 </BaseLayout>
 
 <style>
+  .hero-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 200px); /* Ajuste aproximado para centrar verticalmente */
+    text-align: center;
+  }
+
   .hero {
-    padding: var(--space-xl) 0 var(--space-2xl);
-    max-width: 40rem;
+    padding: var(--space-xl) 0;
+    max-width: 50rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .hero__kicker {
@@ -84,59 +73,6 @@ const showcase = featured.length > 0 ? featured : (await listProjects(lang)).sli
 
   .hero__actions {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
-    min-height: var(--tap-min);
-    padding: 0.65rem 1.25rem;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 1rem;
-    text-decoration: none;
-    border: 1px solid transparent;
-  }
-
-  .btn--primary {
-    background: var(--accent);
-    color: var(--bg);
-  }
-
-  .btn--primary:hover {
-    filter: brightness(1.05);
-  }
-
-  .btn--ghost {
-    border-color: var(--border);
-    color: var(--text);
-  }
-
-  .btn--ghost:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .section {
-    margin-top: var(--space-lg);
-  }
-
-  .section__head {
-    margin-bottom: var(--space-lg);
-  }
-
-  .section__title {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
-
-  .grid {
-    display: grid;
-    gap: var(--space-lg);
-  }
-</style>
+    flex-wrap: wrap;
+    gap: var(--space-sm
