@@ -1,0 +1,53 @@
+---
+import { ui, pathForLocale, type Locale } from '@/i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="shell footer__inner">
+    <p class="footer__copy">© {year} · {t.footer.rights}</p>
+    <a class="footer__link" href={pathForLocale(lang, 'contact')}>{t.nav.contact}</a>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: var(--space-lg) var(--space-md);
+    margin-top: var(--space-2xl);
+  }
+
+  .footer__inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+
+  .footer__copy {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .footer__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    padding: 0 var(--space-xs);
+    margin: 0 calc(-1 * var(--space-xs));
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radius);
+  }
+</style>

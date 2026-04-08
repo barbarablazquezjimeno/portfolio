@@ -1,0 +1,98 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { ui, pathForLocale } from '@/i18n/ui';
+
+const te = ui.es;
+const ten = ui.en;
+---
+
+<BaseLayout lang="es" title={`404 — ${te.metaTitle}`} description={te.a11y.notFoundBody}>
+  <div class="shell notfound">
+    <p class="notfound__code" aria-hidden="true">404</p>
+    <h1 class="page-title">
+      <span lang="es">{te.a11y.notFoundTitle}</span>
+      <span class="page-title__sep" aria-hidden="true"> · </span>
+      <span lang="en">{ten.a11y.notFoundTitle}</span>
+    </h1>
+    <p class="notfound__text" lang="es">{te.a11y.notFoundBody}</p>
+    <p class="notfound__text" lang="en">{ten.a11y.notFoundBody}</p>
+    <nav class="notfound__nav" aria-label={te.a11y.notFoundNavLabel}>
+      <ul class="notfound__list">
+        <li>
+          <a class="notfound__link" href={pathForLocale('es', 'home')}>{te.a11y.notFoundHomeEs}</a>
+        </li>
+        <li>
+          <a class="notfound__link" href={pathForLocale('en', 'home')}>{ten.a11y.notFoundHomeEn}</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</BaseLayout>
+
+<style>
+  .notfound {
+    max-width: 42rem;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .notfound__code {
+    margin: 0 0 var(--space-sm);
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+    font-weight: 700;
+    color: var(--text-muted);
+    line-height: 1;
+  }
+
+  .page-title {
+    margin: 0 0 var(--space-lg);
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 3.5vw, 1.45rem);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .page-title__sep {
+    color: var(--text-muted);
+  }
+
+  .notfound__text {
+    margin: 0 0 var(--space-sm);
+    color: var(--text-muted);
+  }
+
+  .notfound__nav {
+    margin-top: var(--space-xl);
+  }
+
+  .notfound__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: center;
+  }
+
+  @media (min-width: 40rem) {
+    .notfound__list {
+      flex-direction: row;
+      justify-content: center;
+      gap: var(--space-lg);
+    }
+  }
+
+  .notfound__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--tap-min);
+    padding: 0 var(--space-md);
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>

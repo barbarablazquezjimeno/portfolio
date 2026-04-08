@@ -1,0 +1,80 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import { ui, pathForLocale, projectDetailPath, type Locale } from '@/i18n/ui';
+import { listProjects, projectSlugFromId } from '@/lib/projects';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+const items = await listProjects(lang);
+---
+
+<BaseLayout lang={lang} title={`${t.projects.title} — ${t.metaTitle}`}>
+  <div class="shell">
+    <header class="page-head">
+      <a class="back" href={pathForLocale(lang, 'home')}>{t.projects.back}</a>
+      <h1 class="page-title">{t.projects.title}</h1>
+      <p class="page-intro">{t.projects.intro}</p>
+    </header>
+    <div class="grid">
+      {
+        items.map((p) => {
+          const slug = projectSlugFromId(p.id, lang);
+          return (
+            <ProjectCard
+              href={projectDetailPath(lang, slug)}
+              title={p.data.title}
+              description={p.data.description}
+              date={p.data.date}
+              cover={p.data.cover}
+              coverAlt={p.data.coverAlt}
+              viewCaseLabel={t.a11y.viewCase}
+            />
+          );
+        })
+      }
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head {
+    max-width: 40rem;
+    margin-bottom: var(--space-xl);
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    margin-bottom: var(--space-md);
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-muted);
+  }
+
+  .back:hover {
+    color: var(--accent);
+  }
+
+  .page-title {
+    margin: 0 0 var(--space-sm);
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 600;
+  }
+
+  .page-intro {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--space-lg);
+  }
+</style>

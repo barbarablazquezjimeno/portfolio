@@ -1,0 +1,64 @@
+{
+  "metaTitle": "Portfolio — Product Designer",
+  "metaDescription": "Case studies and experience as a product designer.",
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "home": {
+    "kicker": "Product design",
+    "headline": "Design focused on clarity, accessibility, and measurable outcomes.",
+    "sub": "Selected recent work. Each case outlines the problem, process, and impact.",
+    "ctaProjects": "View projects",
+    "ctaContact": "Contact",
+    "featured": "Featured"
+  },
+  "projects": {
+    "title": "Projects",
+    "intro": "Case studies. Edit or add files under content/projects/en/.",
+    "back": "Back to home"
+  },
+  "about": {
+    "title": "About"
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "For collaborations or speaking, email:",
+    "copyEmail": "Copy email",
+    "copied": "Copied",
+    "socialHeading": "Links & social"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  },
+  "lang": {
+    "es": "ES",
+    "en": "EN",
+    "label": "Language"
+  },
+  "a11y": {
+    "skipToContent": "Skip to content",
+    "navPrimary": "Main navigation",
+    "logoToHome": "Go to home — Portfolio",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "menuToggleVisible": "Menu",
+    "switchToEnglish": "Switch site to English",
+    "switchToSpanish": "Switch site to Spanish",
+    "viewCase": "View case",
+    "cardCoverAlt": "Project image",
+    "backToProjects": "Back to project list",
+    "contactEmailLabel": "Email address",
+    "copyEmailFor": "Copy email address to clipboard",
+    "externalLink": "Opens in a new tab",
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "This page does not exist or has moved.",
+    "notFoundHomeEs": "",
+    "notFoundHomeEn": "Go to English home",
+    "notFoundNavLabel": "Home links by language",
+    "viewCaseInEnglish": "",
+    "viewCaseInSpanish": "View this case in Spanish"
+  }
+}

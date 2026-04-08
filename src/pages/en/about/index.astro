@@ -1,0 +1,11 @@
+---
+import SiteMarkdownPage from '@/components/pages/SiteMarkdownPage.astro';
+import { getEntry } from 'astro:content';
+
+const page = await getEntry('sitePages', 'en/about');
+if (!page) {
+  throw new Error('Missing content: src/content/sitePages/en/about.md');
+}
+---
+
+<SiteMarkdownPage lang="en" page={page} />

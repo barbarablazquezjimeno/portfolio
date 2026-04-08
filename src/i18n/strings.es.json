@@ -1,0 +1,64 @@
+{
+  "metaTitle": "Portfolio — Product Designer",
+  "metaDescription": "Casos de estudio y trayectoria como diseñador de producto.",
+  "nav": {
+    "home": "Inicio",
+    "projects": "Proyectos",
+    "about": "Sobre mí",
+    "contact": "Contacto"
+  },
+  "home": {
+    "kicker": "Product design",
+    "headline": "Diseño centrado en claridad, accesibilidad y resultados medibles.",
+    "sub": "Selección de trabajo reciente. Cada caso resume el problema, el proceso y el impacto.",
+    "ctaProjects": "Ver proyectos",
+    "ctaContact": "Contacto",
+    "featured": "Destacados"
+  },
+  "projects": {
+    "title": "Proyectos",
+    "intro": "Casos de estudio. Edita o añade archivos en content/projects/es/.",
+    "back": "Volver al inicio"
+  },
+  "about": {
+    "title": "Sobre mí"
+  },
+  "contact": {
+    "title": "Contacto",
+    "intro": "Para colaboraciones o charlas, escribe a:",
+    "copyEmail": "Copiar email",
+    "copied": "Copiado",
+    "socialHeading": "Enlaces y redes"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados."
+  },
+  "lang": {
+    "es": "ES",
+    "en": "EN",
+    "label": "Idioma"
+  },
+  "a11y": {
+    "skipToContent": "Saltar al contenido",
+    "navPrimary": "Navegación principal",
+    "logoToHome": "Ir al inicio — Portfolio",
+    "openMenu": "Abrir menú de navegación",
+    "closeMenu": "Cerrar menú de navegación",
+    "menuToggleVisible": "Menú",
+    "switchToEnglish": "Cambiar el sitio a inglés",
+    "switchToSpanish": "Cambiar el sitio a español",
+    "viewCase": "Ver caso",
+    "cardCoverAlt": "Imagen del proyecto",
+    "backToProjects": "Volver a la lista de proyectos",
+    "contactEmailLabel": "Correo electrónico",
+    "copyEmailFor": "Copiar correo al portapapeles",
+    "externalLink": "Abre en una pestaña nueva",
+    "notFoundTitle": "Página no encontrada",
+    "notFoundBody": "La página no existe o se ha movido.",
+    "notFoundHomeEs": "Ir al inicio en español",
+    "notFoundHomeEn": "",
+    "notFoundNavLabel": "Accesos al inicio por idioma",
+    "viewCaseInEnglish": "Ver este caso en inglés",
+    "viewCaseInSpanish": ""
+  }
+}

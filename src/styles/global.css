@@ -1,0 +1,220 @@
+:root {
+  color-scheme: light dark;
+  --bg: #faf9f7;
+  --bg-elevated: #ffffff;
+  --text: #14120f;
+  /* ~4.6:1 on --bg for body text (WCAG AA) */
+  --text-muted: #4a4640;
+  --accent: #1a5e52;
+  --accent-hover: #144a40;
+  --focus-ring: #0b3d35;
+  --accent-soft: rgba(26, 94, 82, 0.14);
+  --border: rgba(20, 18, 15, 0.12);
+  --radius: 14px;
+  --shadow: 0 18px 50px rgba(20, 18, 15, 0.08);
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --space-xs: 0.35rem;
+  --space-sm: 0.65rem;
+  --space-md: 1rem;
+  --space-lg: 1.75rem;
+  --space-xl: 2.75rem;
+  --space-2xl: 4.25rem;
+  --max: 68rem;
+  /* Minimum touch target (WCAG 2.5.5 / best practice) */
+  --tap-min: 44px;
+  --header-break: 48rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f0e0c;
+    --bg-elevated: #171512;
+    --text: #f4f1eb;
+    --text-muted: #c4beb2;
+    --accent: #4fd1b8;
+    --accent-hover: #6fdcc6;
+    --focus-ring: #b8f5e8;
+    --accent-soft: rgba(79, 209, 184, 0.14);
+    --border: rgba(244, 241, 235, 0.14);
+    --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  /* Safe areas (notched phones) */
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Visible keyboard focus (2.4.7 Focus Visible) */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--accent-hover);
+  text-decoration-thickness: 2px;
+}
+
+/* Skip link: visible only when focused */
+.skip-link {
+  position: fixed;
+  left: var(--space-md);
+  top: var(--space-md);
+  z-index: 9999;
+  padding: 0.75rem 1.1rem;
+  min-height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+  background: var(--text);
+  color: var(--bg);
+  border-radius: var(--radius);
+  font-weight: 600;
+  text-decoration: none;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  clip-path: none;
+  clip: auto;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  white-space: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
+}
+
+.prose {
+  max-width: 48rem;
+}
+
+.prose h2,
+.prose h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-sm);
+}
+
+.prose h2 {
+  font-size: clamp(1.35rem, 2.5vw, 1.65rem);
+}
+
+.prose p {
+  margin: 0 0 var(--space-md);
+  color: var(--text-muted);
+}
+
+.prose ul,
+.prose ol {
+  margin: 0 0 var(--space-md);
+  padding-left: 1.25rem;
+  color: var(--text-muted);
+}
+
+.prose li {
+  margin-bottom: var(--space-xs);
+}
+
+/* Figma / embeds: wrap iframe in <div class="embed-frame">…</div> in Markdown */
+.prose .embed-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: min(70vh, 520px);
+  margin: var(--space-lg) 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.prose .embed-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only--focusable:focus,
+.sr-only--focusable:focus-visible {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}

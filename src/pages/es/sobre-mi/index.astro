@@ -1,0 +1,11 @@
+---
+import SiteMarkdownPage from '@/components/pages/SiteMarkdownPage.astro';
+import { getEntry } from 'astro:content';
+
+const page = await getEntry('sitePages', 'es/sobre-mi');
+if (!page) {
+  throw new Error('Missing content: src/content/sitePages/es/sobre-mi.md');
+}
+---
+
+<SiteMarkdownPage lang="es" page={page} />

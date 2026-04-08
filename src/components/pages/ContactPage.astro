@@ -1,0 +1,161 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { ui, type Locale } from '@/i18n/ui';
+import { contactEmail, social } from '@/data/site';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+const mailLabel = `${t.a11y.contactEmailLabel}: ${contactEmail}`;
+const copyLabel = `${t.a11y.copyEmailFor} (${contactEmail})`;
+---
+
+<BaseLayout lang={lang} title={`${t.contact.title} — ${t.metaTitle}`}>
+  <section class="shell contact" aria-labelledby="contact-title">
+    <h1 id="contact-title" class="page-title">{t.contact.title}</h1>
+    <p id="contact-intro" class="contact__intro">{t.contact.intro}</p>
+    <p class="contact__email">
+      <a href={`mailto:${contactEmail}`} aria-label={mailLabel}>{contactEmail}</a>
+    </p>
+    <button
+      type="button"
+      class="btn"
+      id="copy-email"
+      data-email={contactEmail}
+      data-copied={t.contact.copied}
+      aria-label={copyLabel}
+      aria-describedby="contact-intro"
+    >
+      {t.contact.copyEmail}
+    </button>
+    <p id="copy-feedback" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+    {
+      social.linkedin || social.behance ? (
+        <>
+          <h2 class="contact__subhead">{t.contact.socialHeading}</h2>
+          <ul class="contact__social">
+            {social.linkedin ? (
+              <li>
+                <a
+                  href={social.linkedin}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  aria-label={`LinkedIn (${t.a11y.externalLink})`}
+                >
+                  LinkedIn
+                </a>
+              </li>
+            ) : null}
+            {social.behance ? (
+              <li>
+                <a
+                  href={social.behance}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  aria-label={`Behance (${t.a11y.externalLink})`}
+                >
+                  Behance
+                </a>
+              </li>
+            ) : null}
+          </ul>
+        </>
+      ) : null
+    }
+  </section>
+</BaseLayout>
+
+<script>
+  const btn = document.getElementById('copy-email');
+  const feedback = document.getElementById('copy-feedback');
+  btn?.addEventListener('click', async () => {
+    const email = btn.getAttribute('data-email');
+    const copied = btn.getAttribute('data-copied') ?? '';
+    if (!email || !feedback) return;
+    try {
+      await navigator.clipboard.writeText(email);
+      feedback.textContent = copied;
+      window.setTimeout(() => {
+        feedback.textContent = '';
+      }, 3000);
+    } catch {
+      feedback.textContent = '';
+    }
+  });
+</script>
+
+<style>
+  .contact {
+    max-width: 40rem;
+  }
+
+  .page-title {
+    margin: 0 0 var(--space-md);
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 600;
+  }
+
+  .contact__intro {
+    margin: 0 0 var(--space-sm);
+    color: var(--text-muted);
+  }
+
+  .contact__email {
+    margin: 0 0 var(--space-md);
+    font-size: 1.15rem;
+    font-weight: 600;
+    word-break: break-word;
+  }
+
+  .contact__email a {
+    text-decoration: none;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--tap-min);
+    padding: 0.65rem 1.25rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 1rem;
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .contact__subhead {
+    margin: var(--space-xl) 0 var(--space-sm);
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+  }
+
+  .contact__social {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  .contact__social a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>
