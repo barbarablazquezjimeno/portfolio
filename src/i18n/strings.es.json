@@ -8,12 +8,11 @@
     "contact": "Contacto"
   },
   "home": {
-    "kicker": "Product design",
-    "headline": "Diseño centrado en claridad, accesibilidad y resultados medibles.",
+    "kicker": "Bárbara Blazquez",
     "sub": "Selección de trabajo reciente. Cada caso resume el problema, el proceso y el impacto.",
-    "ctaProjects": "Ver proyectos",
+    "ctaProjects": "Ver mis proyectos",
     "ctaContact": "Contacto",
-    "featured": "Destacados"
+    "moreTitle": "Más de mí"
   },
   "projects": {
     "title": "Proyectos",

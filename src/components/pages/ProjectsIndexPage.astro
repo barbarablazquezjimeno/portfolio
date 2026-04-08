@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import ProjectCard from '@/components/ProjectCard.astro';
+import ProjectCardDefault from '@/components/ProjectCardDefault.astro';
 import { ui, pathForLocale, projectDetailPath, type Locale } from '@/i18n/ui';
 import { listProjects, projectSlugFromId } from '@/lib/projects';
 
@@ -25,7 +25,7 @@ const items = await listProjects(lang);
         items.map((p) => {
           const slug = projectSlugFromId(p.id, lang);
           return (
-            <ProjectCard
+            <ProjectCardDefault
               href={projectDetailPath(lang, slug)}
               title={p.data.title}
               description={p.data.description}
@@ -33,6 +33,10 @@ const items = await listProjects(lang);
               cover={p.data.cover}
               coverAlt={p.data.coverAlt}
               viewCaseLabel={t.a11y.viewCase}
+              problem={p.data.problem}
+              solution={p.data.solution}
+              tools={p.data.tools}
+              skills={p.data.skills}
             />
           );
         })
@@ -75,6 +79,7 @@ const items = await listProjects(lang);
 
   .grid {
     display: grid;
+    grid-template-columns: 1fr;
     gap: var(--space-lg);
   }
 </style>

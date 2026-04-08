@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import ProjectCard from '@/components/ProjectCard.astro';
+import ProjectCardPreview from '@/components/ProjectCardPreview.astro';
 import { ui, pathForLocale, projectDetailPath, type Locale } from '@/i18n/ui';
 import { listProjects, projectSlugFromId } from '@/lib/projects';
 
@@ -21,21 +21,23 @@ const showcase = featured.length > 0 ? featured : (await listProjects(lang)).sli
       <h1 id="hero-title" class="hero__title">{t.home.headline}</h1>
       <p class="hero__sub">{t.home.sub}</p>
       <div class="hero__actions">
-        <a class="btn btn--primary" href={pathForLocale(lang, 'projects')}>{t.home.ctaProjects}</a>
-        <a class="btn btn--ghost" href={pathForLocale(lang, 'contact')}>{t.home.ctaContact}</a>
+        <a class="link-action" href={pathForLocale(lang, 'projects')}>
+          {t.home.ctaProjects}
+          <span class="link-action__icon"> →</span>
+        </a>
       </div>
     </section>
 
     <section class="section" aria-labelledby="feat-title">
       <div class="section__head">
-        <h2 id="feat-title" class="section__title">{t.home.featured}</h2>
+        <h2 id="feat-title" class="section__title">{t.home.moreTitle}</h2>
       </div>
       <div class="grid">
         {
           showcase.map((p) => {
             const slug = projectSlugFromId(p.id, lang);
             return (
-              <ProjectCard
+              <ProjectCardPreview
                 href={projectDetailPath(lang, slug)}
                 title={p.data.title}
                 description={p.data.description}
@@ -101,13 +103,24 @@ const showcase = featured.length > 0 ? featured : (await listProjects(lang)).sli
     border: 1px solid transparent;
   }
 
-  .btn--primary {
-    background: var(--accent);
-    color: var(--bg);
+  .link-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: var(--text);
   }
 
-  .btn--primary:hover {
-    filter: brightness(1.05);
+  .link-action:hover {
+    color: var(--text-muted);
+  }
+
+  .link-action__icon {
+    font-weight: 700;
+    text-decoration: none;
   }
 
   .btn--ghost {
@@ -137,6 +150,7 @@ const showcase = featured.length > 0 ? featured : (await listProjects(lang)).sli
 
   .grid {
     display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-lg);
   }
 </style>

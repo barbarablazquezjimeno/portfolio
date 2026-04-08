@@ -4,6 +4,10 @@ description: Simplifying account signup with a focus on clarity and drop-off rat
 date: 2025-01-15
 pairSlug: onboarding-banking
 featured: true
+problem: The signup flow lost users at the verification step due to unclear instructions and complex legal requirements.
+solution: Simplified copy, clear progress indicators, and intuitive error recovery. Prototype ready for A/B testing.
+tools: ["Figma", "Google Analytics", "Framer"]
+skills: ["User Research", "Design System", "Usability Testing"]
 ---
 
 ## Context
