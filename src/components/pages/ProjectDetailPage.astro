@@ -41,6 +41,28 @@ const altLabel = lang === 'es' ? t.a11y.viewCaseInEnglish : t.a11y.viewCaseInSpa
     </header>
     <div class="prose">
       <Content />
+      {entry.data.problem && (
+        <section class="project-detail__section">
+          <h2 class="project-detail__section-title">{t.projectDetail.problem}</h2>
+          <p class="project-detail__section-text">{entry.data.problem}</p>
+        </section>
+      )}
+      {entry.data.solution && (
+        <section class="project-detail__section">
+          <h2 class="project-detail__section-title">{t.projectDetail.solution}</h2>
+          <p class="project-detail__section-text">{entry.data.solution}</p>
+        </section>
+      )}
+      {entry.data.tools && entry.data.tools.length > 0 && (
+        <section class="project-detail__section">
+          <h2 class="project-detail__section-title">{t.projectDetail.tools}</h2>
+          <ul class="project-detail__tools">
+            {entry.data.tools.map((tool) => (
+              <li class="project-detail__tool">{tool}</li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   </article>
 </BaseLayout>
@@ -93,5 +115,40 @@ const altLabel = lang === 'es' ? t.a11y.viewCaseInEnglish : t.a11y.viewCaseInSpa
   .article__alt {
     margin: var(--space-md) 0 0;
     font-size: 0.95rem;
+  }
+
+  .project-detail__section {
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-lg);
+  }
+
+  .project-detail__section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+    color: var(--text);
+  }
+
+  .project-detail__section-text {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin: 0 0 var(--space-md) 0;
+  }
+
+  .project-detail__tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .project-detail__tool {
+    background: var(--border);
+    border-radius: 6px;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.95rem;
+    color: var(--text-muted);
   }
 </style>

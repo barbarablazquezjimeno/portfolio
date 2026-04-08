@@ -1,25 +1,24 @@
 ---
-title: Rediseño del onboarding digital
-description: Simplificación del alta de cuenta con foco en claridad y tasas de abandono.
-date: 2025-01-15
-pairSlug: onboarding-banking
-featured: true
-problem: El flujo de alta perdía usuarios en el paso de verificación debido a instrucciones poco claras y requisitos legales complejos.
-solution: Redacción simplificada, progreso visual clara y recuperación de errores intuitiva. Prototipo listo para pruebas A/B.
-tools: ["Figma", "Google Analytics", "Framer"]
-skills: ["User Research", "Design System", "Usability Testing"]
+title: "Inditex: Rediseño de procesos"
+description: "Optimización de la gestión de inventario y pedidos."
+date: 2023-09-01
+pairSlug: inditex-inventory
+featured: false
+cover: https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1200
+coverAlt: Retail clothing store and logistics
+skills: ["Process Design", "Lean", "UX Research"]
 ---
 
 ## Contexto
 
-El flujo de alta perdía usuarios en el paso de verificación. El negocio necesitaba reducir abandono sin comprometer requisitos legales.
+La gestión de inventario era ineficiente y generaba retrasos en la entrega de pedidos.
 
 ## Enfoque
 
-- Auditoría heurística y mapa de fricción
-- 8 entrevistas con usuarios recientes
-- Iteración en prototipo de alta fidelidad
+- Análisis de procesos actuales
+- Implementación de metodología Lean
+- Pruebas piloto en almacenes
 
 ## Resultado
 
-Redacción más clara, progreso visible y recuperación de errores; prototipo listo para pruebas A/B con el equipo de desarrollo.
+Reducción de tiempos de entrega y mejora en la satisfacción del cliente.

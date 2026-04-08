@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ProjectCardDefault from '@/components/ProjectCardDefault.astro';
+import Button from '@/components/Button.astro';
 import { ui, pathForLocale, projectDetailPath, type Locale } from '@/i18n/ui';
 import { listProjects, projectSlugFromId } from '@/lib/projects';
 
@@ -16,9 +17,10 @@ const items = await listProjects(lang);
 <BaseLayout lang={lang} title={`${t.projects.title} — ${t.metaTitle}`}>
   <div class="shell">
     <header class="page-head">
-      <a class="back" href={pathForLocale(lang, 'home')}>{t.projects.back}</a>
       <h1 class="page-title">{t.projects.title}</h1>
-      <p class="page-intro">{t.projects.intro}</p>
+      <div class="back-wrapper">
+        <Button variant="secondary" href={pathForLocale(lang, 'home')}>{t.projects.back}</Button>
+      </div>
     </header>
     <div class="grid">
       {
@@ -29,9 +31,11 @@ const items = await listProjects(lang);
               href={projectDetailPath(lang, slug)}
               title={p.data.title}
               description={p.data.description}
+              overline={p.data.overline}
               date={p.data.date}
               cover={p.data.cover}
               coverAlt={p.data.coverAlt}
+              cta={p.data.cta}
               viewCaseLabel={t.a11y.viewCase}
               problem={p.data.problem}
               solution={p.data.solution}
@@ -47,39 +51,31 @@ const items = await listProjects(lang);
 
 <style>
   .page-head {
-    max-width: 40rem;
+    max-width: 100%;
     margin-bottom: var(--space-xl);
+    text-align: center;
   }
 
-  .back {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--tap-min);
-    margin-bottom: var(--space-md);
-    font-weight: 600;
-    text-decoration: none;
-    color: var(--text-muted);
-  }
-
-  .back:hover {
-    color: var(--accent);
+  .back-wrapper {
+    margin-top: var(--space-md);
   }
 
   .page-title {
-    margin: 0 0 var(--space-sm);
+    margin: 0;
     font-family: var(--font-display);
     font-size: clamp(1.75rem, 3vw, 2.25rem);
     font-weight: 600;
   }
 
-  .page-intro {
-    margin: 0;
-    color: var(--text-muted);
-  }
-
   .grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-lg);
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

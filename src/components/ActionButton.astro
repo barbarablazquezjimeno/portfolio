@@ -1,0 +1,33 @@
+---
+interface Props {
+  label: string;
+  class?: string;
+}
+
+const { label, class: customClass } = Astro.props;
+const classNames = `action-button ${customClass || ''}`.trim();
+---
+
+<span class={classNames}>
+  <span class="action-button__text">{label}</span>
+  <span class="action-button__icon" aria-hidden="true">↓</span>
+</span>
+
+<style>
+  .action-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .action-button__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: transform 0.2s ease;
+  }
+</style>

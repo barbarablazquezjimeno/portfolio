@@ -1,0 +1,30 @@
+---
+interface Props {
+  label?: string;
+  children?: string | undefined;
+  class?: string;
+}
+
+const { label, children, class: customClass } = Astro.props;
+const classNames = `chip ${customClass || ''}`.trim();
+const content = label ?? children ?? '';
+---
+
+<span class={classNames}>{content}</span>
+
+<style>
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 32px 0 0;
+    background: transparent;
+    border: none;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+</style>

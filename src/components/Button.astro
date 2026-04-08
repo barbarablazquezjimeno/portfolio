@@ -1,33 +1,37 @@
 ---
+import { marked } from 'marked';
+
 interface Props {
   href?: string;
   type?: "button" | "submit" | "reset";
   variant?: "primary" | "secondary";
-  children?: any;
+  children?: string | undefined;
   icon?: string;
   class?: string;
   id?: string;
   'aria-label'?: string;
   title?: string;
-  [key: string]: any;
+  text?: string; // Nuevo campo para texto en markdown
 }
 
 const { 
   href, 
   type = "button", 
   variant = "primary", 
-  children = "Ver mis proyectos",
+  children,
   icon, 
   class: customClass, 
   id,
   'aria-label': ariaLabel,
   title: titleAttr,
+  text,
   ...rest 
 } = Astro.props;
 const Component = href ? "a" : "button";
 const classNames = `btn btn--${variant} ${customClass || ''}`.trim();
-const buttonTitle = titleAttr || (typeof children === 'string' ? children : 'Ver mis proyectos');
-const buttonAriaLabel = ariaLabel || (typeof children === 'string' ? children : 'Ver mis proyectos');
+const buttonTitle = titleAttr || (text ? text : (typeof children === 'string' ? children : ''));
+const buttonAriaLabel = ariaLabel || (text ? text : (typeof children === 'string' ? children : ''));
+const buttonText = text ? marked.parseInline(text) : undefined;
 ---
 
 <Component 
@@ -39,7 +43,9 @@ const buttonAriaLabel = ariaLabel || (typeof children === 'string' ? children : 
   aria-label={buttonAriaLabel}
   {...rest}
 >
-  <span class="btn__text">{children}</span>
+  <span class="btn__text">
+    {buttonText ? <Fragment set:html={buttonText} /> : <slot /> }
+  </span>
   {icon && <span class="btn__icon">{icon}</span>}
 </Component>
 
@@ -56,7 +62,7 @@ const buttonAriaLabel = ariaLabel || (typeof children === 'string' ? children : 
 
   /* Primary variant: 2px border, no fill, black text */
   .btn--primary {
-    padding: 0.65rem 1.25rem;
+    padding: var(--space-xs) var(--space-sm);
     min-height: var(--tap-min);
     color: var(--text);
     border: 2px solid var(--text);

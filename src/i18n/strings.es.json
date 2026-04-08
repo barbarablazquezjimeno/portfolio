@@ -2,6 +2,7 @@
   "metaTitle": "Portfolio — Product Designer",
   "metaDescription": "Casos de estudio y trayectoria como diseñador de producto.",
   "nav": {
+    "logo": "Portfolio",
     "home": "Inicio",
     "projects": "Proyectos",
     "about": "Sobre mí",
@@ -9,15 +10,22 @@
   },
   "home": {
     "kicker": "Bárbara Blazquez",
+    "headline": "Diseño enfocado en claridad, accesibilidad y resultados medibles.",
     "sub": "Selección de trabajo reciente. Cada caso resume el problema, el proceso y el impacto.",
     "ctaProjects": "Ver mis proyectos",
     "ctaContact": "Contacto",
-    "moreTitle": "Más de mí"
+    "moreTitle": "Más de mí",
+    "featured": "Destacado"
   },
   "projects": {
     "title": "Proyectos",
     "intro": "Casos de estudio. Edita o añade archivos en content/projects/es/.",
     "back": "Volver al inicio"
+  },
+  "projectDetail": {
+    "problem": "Problema",
+    "solution": "Solución",
+    "tools": "Herramientas"
   },
   "about": {
     "title": "Sobre mí"
@@ -58,6 +66,6 @@
     "notFoundHomeEn": "",
     "notFoundNavLabel": "Accesos al inicio por idioma",
     "viewCaseInEnglish": "Ver este caso en inglés",
-    "viewCaseInSpanish": ""
+    "viewCaseInSpanish": "Ver este caso en español"
   }
 }

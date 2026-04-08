@@ -1,37 +1,44 @@
 ---
 import Button from '@/components/Button.astro';
+import Chip from '@/components/Chip.astro';
 
 interface Props {
   href: string;
   title: string;
   description: string;
-  date: Date;
+  overline?: string;
+  date?: Date;
   cover?: string;
-  viewCaseLabel: string;
+  viewCaseLabel?: string;
   coverAlt?: string;
+  cta?: string;
   problem?: string;
   solution?: string;
   tools?: string[];
   skills?: string[];
 }
 
+
 const { 
   href, 
   title, 
   description, 
+  overline,
   date, 
   cover, 
-  viewCaseLabel, 
+  viewCaseLabel = "Acceder al detalle del proyecto",
   coverAlt,
+  cta,
   problem,
   solution,
   tools = [],
   skills = []
 } = Astro.props;
 
-const year = date.getFullYear();
+const metaText = overline ?? title ?? (date ? String(date.getFullYear()) : '');
 const linkName = `${viewCaseLabel}: ${title}`;
 const imageAlt = cover ? (coverAlt ?? '') : '';
+const dateTime = date ? date.toISOString().slice(0, 10) : undefined;
 const displayedSkills = skills.slice(0, 4);
 
 function publicAssetSrc(path: string): string {
@@ -63,85 +70,66 @@ const coverSrc = cover ? publicAssetSrc(cover) : undefined;
         )
       }
     </div>
+
     <div class="card-default__content">
-      <div class="card-default__top">
-        <div>
-          <p class="card-default__meta">
-            <time datetime={date.toISOString().slice(0, 10)}>{year}</time>
-          </p>
-          <h3 class="card-default__title">{title}</h3>
-          <p class="card-default__desc">{description}</p>
-        </div>
-        <Button variant="secondary" href={href} icon="→" aria-label={linkName}>{viewCaseLabel}</Button>
+      {metaText && (
+        <p class="card-default__meta">
+          {overline || !dateTime ? metaText : <time datetime={dateTime}>{metaText}</time>}
+        </p>
+      )}
+
+      <p class="card-default__desc">{description}</p>
+
+      <div class="card-default__footer">
+        <Button variant="secondary" href={href} icon="→" aria-label={linkName} text={cta}>{!cta && viewCaseLabel}</Button>
       </div>
+
       {displayedSkills.length > 0 && (
         <div class="card-default__skills">
           {displayedSkills.map((skill) => (
-            <span class="card-default__chip">{skill}</span>
+            <Chip label={skill} />
           ))}
         </div>
       )}
     </div>
   </div>
-
-  {(problem || solution || tools.length > 0) && (
-    <details class="card-default__details">
-      <summary class="card-default__summary">Detalles del proyecto</summary>
-      <div class="card-default__details-content">
-        {problem && (
-          <div class="card-default__section">
-            <h4 class="card-default__section-title">Problema</h4>
-            <p class="card-default__section-text">{problem}</p>
-          </div>
-        )}
-        {solution && (
-          <div class="card-default__section">
-            <h4 class="card-default__section-title">Solución</h4>
-            <p class="card-default__section-text">{solution}</p>
-          </div>
-        )}
-        {tools.length > 0 && (
-          <div class="card-default__section">
-            <h4 class="card-default__section-title">Herramientas</h4>
-            <div class="card-default__tools">
-              {tools.map((tool) => (
-                <span class="card-default__tool">{tool}</span>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </details>
-  )}
 </article>
 
 <style>
   .card-default {
-    border-radius: var(--radius);
-    background: var(--bg-elevated);
+    background: transparent;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    text-align: left;
   }
 
   .card-default__header {
     display: grid;
-    grid-template-columns: 160px 1fr;
+    grid-template-columns: 160px minmax(0, 1fr);
     gap: var(--space-md);
-    padding: var(--space-md);
+    align-items: stretch;
   }
 
   .card-default__media {
     width: 160px;
-    height: 100px;
-    border-radius: 8px;
+    height: 100%;
+    min-height: 100%;
+    max-height: none;
     overflow: hidden;
     background: var(--accent-soft);
     flex-shrink: 0;
+    justify-self: start;
+    grid-row: 1 / span 1;
   }
 
   .card-default__media img {
     width: 100%;
     height: 100%;
+    min-height: 100%;
     object-fit: cover;
+    display: block;
   }
 
   .card-default__placeholder {
@@ -153,13 +141,8 @@ const coverSrc = cover ? publicAssetSrc(cover) : undefined;
   .card-default__content {
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
-  }
-
-  .card-default__top {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-md);
+    align-items: flex-start;
+    gap: 16px;
   }
 
   .card-default__meta {
@@ -170,71 +153,25 @@ const coverSrc = cover ? publicAssetSrc(cover) : undefined;
     color: var(--text-muted);
   }
 
-  .card-default__title {
-    margin: 0 0 var(--space-xs);
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    font-weight: 600;
-    line-height: 1.2;
-  }
-
   .card-default__desc {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.5;
+    color: var(--text);
   }
 
   .card-default__skills {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-xs);
-  }
-
-  .card-default__chip {
-    display: inline-block;
-    padding: 0.35rem 0.75rem;
-    background: var(--accent-soft);
-    border-radius: 999px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--accent);
-  }
-
-  .card-default__details {
-    border-top: 1px solid var(--border);
-    padding: var(--space-md);
-    cursor: pointer;
-  }
-
-  .card-default__summary {
-    list-style: none;
-    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     align-items: center;
-    gap: var(--space-sm);
-    font-weight: 600;
-    color: var(--text);
-    padding-left: 1.5rem;
-    position: relative;
+    gap: 0;
+    overflow-x: auto;
   }
 
-  .card-default__summary::before {
-    content: '▶';
-    position: absolute;
-    left: 0;
-    transition: transform 0.2s ease;
-    font-size: 0.8rem;
-    color: var(--accent);
-  }
-
-  .card-default__details[open] .card-default__summary::before {
-    transform: rotate(90deg);
-  }
-
-  .card-default__details-content {
+  .card-default__footer {
     padding-top: var(--space-md);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
   }
 
   .card-default__section {
@@ -255,6 +192,20 @@ const coverSrc = cover ? publicAssetSrc(cover) : undefined;
     font-size: 0.9rem;
     color: var(--text-muted);
     line-height: 1.5;
+  }
+
+  .card-default__footer :global(.btn--secondary) {
+    padding: 0;
+  }
+
+  @media (max-width: 720px) {
+    .card-default__header {
+      grid-template-columns: 1fr;
+    }
+
+    .card-default__media {
+      justify-self: start;
+    }
   }
 
   .card-default__tools {

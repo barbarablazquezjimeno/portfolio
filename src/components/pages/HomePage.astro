@@ -16,7 +16,7 @@ const showcase = featured.length > 0 ? featured : (await listProjects(lang)).sli
 ---
 
 <BaseLayout lang={lang} title={t.metaTitle} description={t.metaDescription}>
-  <div class="shell">
+  <div class="shell hero-container">
     <section class="hero" aria-labelledby="hero-title">
       <p class="hero__kicker">{t.home.kicker}</p>
       <h1 id="hero-title" class="hero__title">{t.home.headline}</h1>
@@ -27,37 +27,24 @@ const showcase = featured.length > 0 ? featured : (await listProjects(lang)).sli
         </Button>
       </div>
     </section>
-
-    <section class="section" aria-labelledby="feat-title">
-      <div class="section__head">
-        <h2 id="feat-title" class="section__title">{t.home.moreTitle}</h2>
-      </div>
-      <div class="grid">
-        {
-          showcase.map((p) => {
-            const slug = projectSlugFromId(p.id, lang);
-            return (
-              <ProjectCardPreview
-                href={projectDetailPath(lang, slug)}
-                title={p.data.title}
-                description={p.data.description}
-                date={p.data.date}
-                cover={p.data.cover}
-                coverAlt={p.data.coverAlt}
-                viewCaseLabel={t.a11y.viewCase}
-              />
-            );
-          })
-        }
-      </div>
-    </section>
   </div>
 </BaseLayout>
 
 <style>
+  .hero-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 200px); /* Ajuste aproximado para centrar verticalmente */
+    text-align: center;
+  }
+
   .hero {
-    padding: var(--space-xl) 0 var(--space-2xl);
-    max-width: 40rem;
+    padding: var(--space-xl) 0;
+    max-width: 50rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .hero__kicker {
@@ -86,28 +73,6 @@ const showcase = featured.length > 0 ? featured : (await listProjects(lang)).sli
 
   .hero__actions {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
-    gap: var(--space-sm);
-  }
-
-  .section {
-    margin-top: var(--space-lg);
-  }
-
-  .section__head {
-    margin-bottom: var(--space-lg);
-  }
-
-  .section__title {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-lg);
-  }
-</style>
+    gap: var(--space-sm

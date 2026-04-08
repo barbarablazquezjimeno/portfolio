@@ -33,39 +33,7 @@ const copyLabel = `${t.a11y.copyEmailFor} (${contactEmail})`;
       {t.contact.copyEmail}
     </Button>
     <p id="copy-feedback" class="sr-only" aria-live="polite" aria-atomic="true"></p>
-    {
-      social.linkedin || social.behance ? (
-        <>
-          <h2 class="contact__subhead">{t.contact.socialHeading}</h2>
-          <ul class="contact__social">
-            {social.linkedin ? (
-              <li>
-                <a
-                  href={social.linkedin}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  aria-label={`LinkedIn (${t.a11y.externalLink})`}
-                >
-                  LinkedIn
-                </a>
-              </li>
-            ) : null}
-            {social.behance ? (
-              <li>
-                <a
-                  href={social.behance}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  aria-label={`Behance (${t.a11y.externalLink})`}
-                >
-                  Behance
-                </a>
-              </li>
-            ) : null}
-          </ul>
-        </>
-      ) : null
-    }
+    {/* Sección de redes sociales eliminada por solicitud */}
   </section>
 </BaseLayout>
 

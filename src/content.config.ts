@@ -7,6 +7,7 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
+    overline: z.string().optional(),
     date: z.coerce.date(),
     /** Same value in ES and EN pairs for language switching */
     pairSlug: z.string(),
@@ -20,6 +21,8 @@ const projects = defineCollection({
     problem: z.string().optional(),
     /** Solution applied for projectcard_default expandable view */
     solution: z.string().optional(),
+    /** Texto personalizado para el botón CTA */
+    cta: z.string().optional(),
     /** Array of tools/software used (e.g. ["Figma", "Framer", "Google Analytics"]) */
     tools: z.array(z.string()).optional(),
     /** Array of techniques/skills used (max 4) (e.g. ["User Research", "Design System", "Accessibility"]) */
