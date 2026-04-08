@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/Button.astro';
 import ProjectCardPreview from '@/components/ProjectCardPreview.astro';
 import { ui, pathForLocale, projectDetailPath, type Locale } from '@/i18n/ui';
 import { listProjects, projectSlugFromId } from '@/lib/projects';
@@ -21,10 +22,9 @@ const showcase = featured.length > 0 ? featured : (await listProjects(lang)).sli
       <h1 id="hero-title" class="hero__title">{t.home.headline}</h1>
       <p class="hero__sub">{t.home.sub}</p>
       <div class="hero__actions">
-        <a class="link-action" href={pathForLocale(lang, 'projects')}>
+        <Button variant="primary" href={pathForLocale(lang, 'projects')}>
           {t.home.ctaProjects}
-          <span class="link-action__icon"> →</span>
-        </a>
+        </Button>
       </div>
     </section>
 
@@ -88,49 +88,6 @@ const showcase = featured.length > 0 ? featured : (await listProjects(lang)).sli
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-sm);
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: var(--tap-min);
-    padding: 0.65rem 1.25rem;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 1rem;
-    text-decoration: none;
-    border: 1px solid transparent;
-  }
-
-  .link-action {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-weight: 700;
-    font-size: 1rem;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    color: var(--text);
-  }
-
-  .link-action:hover {
-    color: var(--text-muted);
-  }
-
-  .link-action__icon {
-    font-weight: 700;
-    text-decoration: none;
-  }
-
-  .btn--ghost {
-    border-color: var(--border);
-    color: var(--text);
-  }
-
-  .btn--ghost:hover {
-    border-color: var(--accent);
-    color: var(--accent);
   }
 
   .section {

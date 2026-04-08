@@ -1,4 +1,6 @@
 ---
+import Button from '@/components/Button.astro';
+
 interface Props {
   href: string;
   title: string;
@@ -44,7 +46,7 @@ const coverSrc = cover ? publicAssetSrc(cover) : undefined;
 ---
 
 <article class="card-default">
-  <a class="card-default__header" href={href} aria-label={linkName}>
+  <div class="card-default__header">
     <div class="card-default__media">
       {
         coverSrc ? (
@@ -70,7 +72,7 @@ const coverSrc = cover ? publicAssetSrc(cover) : undefined;
           <h3 class="card-default__title">{title}</h3>
           <p class="card-default__desc">{description}</p>
         </div>
-        <span class="card-default__cta">{viewCaseLabel} →</span>
+        <Button variant="secondary" href={href} icon="→" aria-label={linkName}>{viewCaseLabel}</Button>
       </div>
       {displayedSkills.length > 0 && (
         <div class="card-default__skills">
@@ -80,7 +82,7 @@ const coverSrc = cover ? publicAssetSrc(cover) : undefined;
         </div>
       )}
     </div>
-  </a>
+  </div>
 
   {(problem || solution || tools.length > 0) && (
     <details class="card-default__details">
@@ -125,15 +127,6 @@ const coverSrc = cover ? publicAssetSrc(cover) : undefined;
     grid-template-columns: 160px 1fr;
     gap: var(--space-md);
     padding: var(--space-md);
-    text-decoration: none;
-    color: inherit;
-    border-radius: inherit;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-
-  .card-default__header:hover {
-    background-color: var(--bg);
   }
 
   .card-default__media {
@@ -189,14 +182,6 @@ const coverSrc = cover ? publicAssetSrc(cover) : undefined;
     margin: 0;
     font-size: 0.9rem;
     color: var(--text-muted);
-  }
-
-  .card-default__cta {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--accent);
-    white-space: nowrap;
-    flex-shrink: 0;
   }
 
   .card-default__skills {
