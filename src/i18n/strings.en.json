@@ -19,7 +19,13 @@
   "projects": {
     "title": "Projects",
     "intro": "Case studies. Edit or add files under content/projects/en/.",
-    "back": "Back to home"
+    "back": "Back to home",
+    "behanceCta": {
+      "title": "Want to see more?",
+      "lead": "Explore more work on my Behance.",
+      "button": "View on Behance",
+      "buttonAria": "View more projects on Behance (opens in a new tab)"
+    }
   },
   "projectDetail": {
     "problem": "Problem",

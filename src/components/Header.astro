@@ -19,20 +19,14 @@ function linkFor(page: 'home' | 'projects' | 'about' | 'contact') {
   return pathForLocale(lang, page);
 }
 
-
 const nav = [
-  { href: '#hero', label: t.nav.home },
-  { href: '#sobre-mi', label: t.nav.about },
-  { href: '#proyectos', label: t.nav.projects },
-  { href: '#contacto', label: t.nav.contact },
+  { id: 'top', href: linkFor('home'), label: t.nav.home },
+  { id: 'projects', href: linkFor('projects'), label: t.nav.projects },
+  { id: 'about', href: linkFor('about'), label: t.nav.about },
+  { id: 'contact', href: linkFor('contact'), label: t.nav.contact },
 ];
 
-function active(href: string) {
-  const target = stripBasePath(new URL(href, Astro.url).pathname, baseUrl);
-  const cur = relative.replace(/\/$/, '') || '/';
-  const tNorm = target.replace(/\/$/, '') || '/';
-  if (tNorm === cur) return true;
-  if (cur.startsWith(tNorm + '/') && tNorm.length > 3) return true;
+function active(_href: string) {
   return false;
 }
 ---
@@ -52,6 +46,8 @@ function active(href: string) {
                 <a
                   href={item.href}
                   class="site-nav__link"
+                  data-nav-section={item.id}
+                  aria-current={undefined}
                 >
                   {item.label}
                 </a>
@@ -88,6 +84,7 @@ function active(href: string) {
 </header>
 
 <script>
+function initHeaderScripts() {
   const toggle = document.getElementById('nav-toggle');
   const nav = document.getElementById('site-nav');
   if (toggle && nav) {
@@ -126,9 +123,116 @@ function active(href: string) {
     });
 
     nav.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', closeIfMobile);
+      link.addEventListener('click', (e) => {
+        closeIfMobile();
+        
+        // Implement JS smooth scroll for anchor links so we don't need CSS scroll-behavior: smooth
+        // which breaks Astro View Transitions back navigation.
+        const href = link.getAttribute('href');
+        if (href && href.includes('#')) {
+          const id = href.split('#')[1];
+          const target = document.getElementById(id);
+          if (target) {
+            // Only prevent default if we are already on the same page
+            if (window.location.pathname === href.split('#')[0] || href.startsWith('#')) {
+              e.preventDefault();
+              target.scrollIntoView({ behavior: 'smooth' });
+              
+              // Update URL hash manually
+              if (window.history.pushState) {
+                const url = new URL(window.location.href);
+                url.hash = id === 'top' ? '' : id;
+                window.history.pushState(window.history.state, '', url);
+              }
+            }
+          }
+        }
+      });
     });
   }
+
+  /** Highlight nav link for the section most visible under the sticky header (one-page). */
+  const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.site-nav__link[data-nav-section]'));
+  const sectionIds = navLinks.map(a => a.getAttribute('data-nav-section')).filter(Boolean) as string[];
+  const sectionEls = sectionIds.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+  
+  if (navLinks.length && sectionEls.length) {
+    const header = document.querySelector('.header');
+    const offset = header instanceof HTMLElement ? header.offsetHeight + 8 : 80;
+
+    let currentActiveId = '';
+    function setActive(navId: string) {
+      if (currentActiveId === navId) return;
+      currentActiveId = navId;
+
+      navLinks.forEach((a) => {
+        const match = a.getAttribute('data-nav-section') === navId;
+        a.classList.toggle('site-nav__link--active', match);
+        if (match) {
+          a.setAttribute('aria-current', 'page');
+        } else {
+          a.removeAttribute('aria-current');
+        }
+      });
+
+      // Update URL hash without jumping or adding to history
+      // We wrap this in a check to ensure we don't interfere with Astro's back navigation
+      if (window.history.replaceState && !document.documentElement.classList.contains('is-transitioning')) {
+        const url = new URL(window.location.href);
+        url.hash = navId === 'top' ? '' : navId;
+        window.history.replaceState(window.history.state, '', url);
+      }
+    }
+
+    let isScrolling = false;
+    function updateSpy() {
+      if (isScrolling) return;
+      isScrolling = true;
+      requestAnimationFrame(() => {
+        const focusY = window.innerHeight * 0.35;
+        let currentId = sectionEls[0]?.id || '';
+        let minDistance = Infinity;
+
+        for (const el of sectionEls) {
+          const rect = el.getBoundingClientRect();
+          // If the section crosses the focus line, it's active
+          if (rect.top <= focusY && rect.bottom >= focusY) {
+            currentId = el.id;
+            break;
+          }
+          // Otherwise, find the one closest to the focus line
+          const dist = Math.min(Math.abs(rect.top - focusY), Math.abs(rect.bottom - focusY));
+          if (dist < minDistance) {
+            minDistance = dist;
+            currentId = el.id;
+          }
+        }
+
+        // If user scrolled to the absolute bottom, highlight the last section (Contact)
+        if (Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 10) {
+          currentId = sectionEls[sectionEls.length - 1].id;
+        }
+
+        if (currentId) setActive(currentId);
+        isScrolling = false;
+      });
+    }
+
+    window.addEventListener('scroll', updateSpy, { passive: true });
+    window.addEventListener('resize', updateSpy, { passive: true });
+    updateSpy();
+
+    function syncFromHash() {
+      const h = window.location.hash.slice(1);
+      if (!h) return;
+      if (sectionIds.includes(h)) setActive(h);
+    }
+    window.addEventListener('hashchange', syncFromHash);
+  }
+}
+
+initHeaderScripts();
+document.addEventListener('astro:after-swap', initHeaderScripts);
 </script>
 
 <style>
@@ -136,10 +240,38 @@ function active(href: string) {
     position: sticky;
     top: 0;
     z-index: 20;
-    background: color-mix(in oklab, var(--bg) 92%, transparent);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
+    background: color-mix(in oklab, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid transparent;
     padding-top: env(safe-area-inset-top, 0);
+    transition:
+      background 0.35s ease,
+      border-color 0.35s ease,
+      box-shadow 0.35s ease,
+      backdrop-filter 0.35s ease;
+  }
+
+  .header--scrolled {
+    background: color-mix(in oklab, var(--bg) 94%, transparent);
+    backdrop-filter: blur(16px);
+    border-bottom-color: var(--border);
+    box-shadow: 0 12px 40px color-mix(in oklab, var(--text) 5%, transparent);
+  }
+
+  .header--glitch .header__bar {
+    animation: headerGlitch 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  @keyframes headerGlitch {
+    0% { filter: blur(0); transform: scale(1); }
+    50% { filter: blur(4px); transform: scale(0.99); }
+    100% { filter: blur(0); transform: scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header--glitch .header__bar {
+      animation: none;
+    }
   }
 
   .header__shell {
@@ -160,8 +292,9 @@ function active(href: string) {
 
   .logo {
     font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.15rem;
+    font-weight: 500;
+    font-size: 1.35rem;
+    letter-spacing: 0.06em;
     color: var(--text);
     text-decoration: none;
     min-height: var(--tap-min);
@@ -171,7 +304,7 @@ function active(href: string) {
   }
 
   .logo:hover {
-    color: var(--accent);
+    color: var(--text-muted);
   }
 
   .header__end {
@@ -199,12 +332,14 @@ function active(href: string) {
     padding: 0;
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
     gap: var(--space-xs);
   }
 
   .site-nav__link {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     min-height: var(--tap-min);
     padding: var(--space-sm) var(--space-xs);
     margin-left: calc(-1 * var(--space-xs));
@@ -212,20 +347,22 @@ function active(href: string) {
     border-radius: var(--radius);
     color: var(--text-muted);
     text-decoration: none;
-    font-weight: 600;
-    font-size: 1rem;
+    font-weight: 500;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
 
   .site-nav__link:hover {
     color: var(--text);
-    background: var(--accent-soft);
+    background: transparent;
   }
 
   .site-nav__link--active {
     color: var(--text);
     text-decoration: underline;
-    text-decoration-color: var(--accent);
-    text-underline-offset: 4px;
+    text-decoration-color: currentColor;
+    text-underline-offset: 5px;
   }
 
   .lang {
@@ -292,6 +429,7 @@ function active(href: string) {
   @media (min-width: 48rem) {
     .header__bar {
       flex-wrap: nowrap;
+      justify-content: flex-start;
       gap: var(--space-lg);
       padding: var(--space-sm) 0;
     }
@@ -303,9 +441,10 @@ function active(href: string) {
     .site-nav {
       order: 0;
       width: auto;
-      flex: 1;
+      flex: 0 1 auto;
+      margin-left: auto;
       display: flex !important;
-      justify-content: center;
+      justify-content: flex-end;
       padding: 0;
       border-top: none;
     }
@@ -314,7 +453,7 @@ function active(href: string) {
       flex-direction: row;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
       gap: var(--space-xs) var(--space-lg);
     }
 
@@ -323,7 +462,9 @@ function active(href: string) {
       padding: var(--space-sm) var(--space-sm);
       margin: 0;
       font-weight: 500;
-      font-size: 0.95rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
     }
 
     .header__end {

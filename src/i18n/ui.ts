@@ -1,7 +1,6 @@
 /**
- * Textos de la interfaz (menús, botones, accesibilidad, meta…).
- * Edita los JSON: `strings.es.json` y `strings.en.json`.
- * Los archivos Markdown (`content/`) son el contenido largo de casos y páginas.
+ * UI copy (nav, buttons, a11y, meta). Source of truth: `strings.es.json` / `strings.en.json`.
+ * Long-form content lives in Markdown under `content/`.
  */
 import stringsEs from './strings.es.json';
 import stringsEn from './strings.en.json';
@@ -17,25 +16,24 @@ export const ui = {
   en: stringsEn,
 } as const;
 
-export function pathForLocale(locale: Locale, page: 'home' | 'projects' | 'about' | 'contact'): string {
+/** One-page anchors per locale (single HTML document per language). */
+export function pathForLocale(locale: Locale, page: 'home' | 'projects' | 'about' | 'contact' | 'root'): string {
   const base = import.meta.env.BASE_URL || '/';
   const root = base.endsWith('/') ? base : `${base}/`;
-  if (page === 'home') return `${root}${locale}/`;
-  if (locale === 'es') {
-    if (page === 'projects') return `${root}es/proyectos/`;
-    if (page === 'about') return `${root}es/sobre-mi/`;
-    return `${root}es/contacto/`;
-  }
-  if (page === 'projects') return `${root}en/projects/`;
-  if (page === 'about') return `${root}en/about/`;
-  return `${root}en/contact/`;
+  const home = `${root}${locale}/`;
+  if (page === 'root') return home;
+  if (page === 'home') return `${home}#top`;
+  if (page === 'projects') return `${home}#projects`;
+  if (page === 'about') return `${home}#about`;
+  return `${home}#contact`;
 }
 
+/** Dedicated project case URL (localized). */
 export function projectDetailPath(locale: Locale, slug: string): string {
   const base = import.meta.env.BASE_URL || '/';
   const root = base.endsWith('/') ? base : `${base}/`;
-  if (locale === 'es') return `${root}es/proyectos/${slug}/`;
-  return `${root}en/projects/${slug}/`;
+  const segment = locale === 'es' ? `es/proyectos/${slug}` : `en/projects/${slug}`;
+  return `${root}${segment}/`;
 }
 
 export function otherLocale(locale: Locale): Locale {

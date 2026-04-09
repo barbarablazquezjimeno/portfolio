@@ -4,6 +4,7 @@ import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import type { Locale } from '@/i18n/ui';
 import { ui } from '@/i18n/ui';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   lang: Locale;
@@ -24,28 +25,212 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content={pageDesc} />
-    <meta name="theme-color" content="#faf9f7" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f2f0eb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)" />
     <link rel="canonical" href={canonical} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
       rel="stylesheet"
     />
+    <ClientRouter />
     <title>{pageTitle}</title>
   </head>
-  <body>
+  <body class="site site--editorial">
+    <div class="spotlight" aria-hidden="true"></div>
     <a class="skip-link" href="#main">{t.a11y.skipToContent}</a>
     <Header lang={lang} currentPath={Astro.url.pathname} />
     <main id="main" tabindex="-1">
       <slot />
     </main>
     <Footer lang={lang} />
+    <script is:inline>
+      function initReveal() {
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var nodes = document.querySelectorAll('.reveal');
+        if (!nodes.length) return;
+        if (reduced || !('IntersectionObserver' in window)) {
+          nodes.forEach(function (el) {
+            el.classList.add('reveal--visible');
+          });
+          return;
+        }
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('reveal--visible');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { root: null, rootMargin: '0px 0px -5% 0px', threshold: 0.05 }
+        );
+        nodes.forEach(function (el) {
+          io.observe(el);
+        });
+      }
+      initReveal();
+      document.addEventListener('astro:after-swap', initReveal);
+      
+      // CRITICAL: Pre-reveal elements on new page during View Transitions
+      // so the browser captures the visible state for reverse animations.
+      document.addEventListener('astro:before-swap', (e) => {
+        e.newDocument.querySelectorAll('.reveal').forEach((el) => {
+          el.classList.add('reveal--visible');
+          // Force inline styles to bypass CSS transitions during capture
+          el.style.transition = 'none';
+          el.style.transitionDelay = '0ms';
+        });
+      });
+    </script>
+    <script is:inline>
+      // Track internal navigation for back button logic
+      if (typeof window.hasNavigatedInternally === 'undefined') {
+        window.hasNavigatedInternally = false;
+      }
+
+      function initHeader() {
+        var header = document.querySelector('.header');
+        var wasScrolled = false;
+        function syncScrollUi() {
+          if (header) {
+            var isScrolled = window.scrollY > 18;
+            if (isScrolled !== wasScrolled) {
+              header.classList.toggle('header--scrolled', isScrolled);
+              // Trigger glitch effect
+              header.classList.remove('header--glitch');
+              // Trigger reflow
+              void header.offsetWidth;
+              header.classList.add('header--glitch');
+              wasScrolled = isScrolled;
+            }
+          }
+        }
+        syncScrollUi();
+        window.addEventListener('scroll', syncScrollUi, { passive: true });
+      }
+      initHeader();
+      document.addEventListener('astro:after-swap', initHeader);
+      
+      // Manage smooth scroll behavior during View Transitions
+      document.addEventListener('astro:before-preparation', () => {
+        document.documentElement.classList.add('is-transitioning');
+      });
+      document.addEventListener('astro:before-swap', () => {
+        window.hasNavigatedInternally = true;
+      });
+      document.addEventListener('astro:after-swap', () => {
+        // Keep it disabled for a tiny bit to allow scroll restoration to jump instantly
+        setTimeout(() => {
+          document.documentElement.classList.remove('is-transitioning');
+        }, 10);
+      });
+
+      // Global Spotlight Effect
+      function initSpotlight() {
+        const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (isReduced) return;
+        
+        const updateMouse = (e) => {
+          document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+          document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+        };
+        
+        window.addEventListener('mousemove', updateMouse, { passive: true });
+      }
+      initSpotlight();
+
+      // Global Scroll Velocity Skew Effect
+      function initScrollSkew() {
+        const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (isReduced) return;
+
+        let lastScrollY = window.scrollY;
+        let lastTime = performance.now();
+        let velocity = 0;
+        let rafId = null;
+
+        const main = document.getElementById('main');
+        if (!main) return;
+
+        // Add class to enable hardware acceleration
+        main.classList.add('scroll-skew');
+
+        function update() {
+          const now = performance.now();
+          const deltaY = window.scrollY - lastScrollY;
+          const dt = now - lastTime;
+
+          if (dt > 0) {
+            // Calculate velocity (pixels per ms)
+            const currentVelocity = deltaY / dt;
+            // Smooth velocity changes (lerp)
+            velocity += (currentVelocity - velocity) * 0.2;
+          }
+
+          // Clamp max skew to prevent extreme distortion
+          const maxSkew = 3; 
+          const skewAmount = Math.max(-maxSkew, Math.min(maxSkew, velocity * 0.5));
+
+          // Apply transform
+          if (Math.abs(skewAmount) > 0.01) {
+            main.style.transform = `skewY(${skewAmount}deg)`;
+          } else {
+            main.style.transform = 'skewY(0deg)';
+          }
+
+          lastScrollY = window.scrollY;
+          lastTime = now;
+          rafId = requestAnimationFrame(update);
+        }
+
+        window.addEventListener('scroll', () => {
+          if (!rafId) rafId = requestAnimationFrame(update);
+        }, { passive: true });
+
+        // Ensure it resets when scrolling stops
+        setInterval(() => {
+          if (Math.abs(window.scrollY - lastScrollY) < 1) {
+            velocity *= 0.8; // Decay
+          }
+        }, 50);
+      }
+      
+      // Initialize on load and after View Transitions
+      initScrollSkew();
+      document.addEventListener('astro:after-swap', initScrollSkew);
+    </script>
   </body>
 </html>
 
 <style is:global>
+  /* View Transitions Global Styles */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.5s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  ::view-transition-old(root) {
+    animation-name: fadeOutScale;
+  }
+
+  ::view-transition-new(root) {
+    animation-name: fadeInScale;
+  }
+
+  @keyframes fadeOutScale {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.98); }
+  }
+
+  @keyframes fadeInScale {
+    from { opacity: 0; transform: scale(1.02); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
   #main {
     padding: var(--space-lg) max(var(--space-md), env(safe-area-inset-right))
       var(--space-2xl) max(var(--space-md), env(safe-area-inset-left));

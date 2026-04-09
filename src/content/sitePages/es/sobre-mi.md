@@ -5,10 +5,7 @@ description: Trayectoria y enfoque de trabajo.
 
 Soy **diseñador/a de producto** con interés en sistemas complejos, accesibilidad y colaboración con ingeniería.
 
-## Experiencia
-
-- **2023 — actual · Empresa X** — Product Designer. Discovery, prototipos y design QA.
-- **2020 — 2023 · Estudio Y** — UX/UI en proyectos retail y fintech.
+Debajo tienes la **trayectoria** con más detalle (la columna fija a la izquierda en pantallas grandes va siguiendo la etapa activa al hacer scroll).
 
 ## Cómo trabajo
 

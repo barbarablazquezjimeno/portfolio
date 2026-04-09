@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/Button.astro';
 import { ui, pathForLocale } from '@/i18n/ui';
 
 const te = ui.es;
@@ -19,10 +20,10 @@ const ten = ui.en;
     <nav class="notfound__nav" aria-label={te.a11y.notFoundNavLabel}>
       <ul class="notfound__list">
         <li>
-          <a class="notfound__link" href={pathForLocale('es', 'home')}>{te.a11y.notFoundHomeEs}</a>
+          <Button variant="primary" href={pathForLocale('es', 'home')}>{te.a11y.notFoundHomeEs}</Button>
         </li>
         <li>
-          <a class="notfound__link" href={pathForLocale('en', 'home')}>{ten.a11y.notFoundHomeEn}</a>
+          <Button variant="ghost" href={pathForLocale('en', 'home')}>{ten.a11y.notFoundHomeEn}</Button>
         </li>
       </ul>
     </nav>
@@ -84,15 +85,5 @@ const ten = ui.en;
       justify-content: center;
       gap: var(--space-lg);
     }
-  }
-
-  .notfound__link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: var(--tap-min);
-    padding: 0 var(--space-md);
-    font-weight: 600;
-    text-decoration: none;
   }
 </style>

@@ -119,10 +119,25 @@ En `src/pages` sigue habiendo **rutas separadas** para `es` y `en` (así las URL
 
 ## 6. Dónde va cada tipo de texto: Markdown o JSON
 
-- **`src/content/.../*.md`** → Textos **largos** del portfolio: casos de estudio, párrafos de “Sobre mí”, secciones. Lo que se lee como **artículo**.
+- **`src/content/.../*.md`** → Textos **largos** del portfolio: casos de estudio, “Sobre mí” (incluida la trayectoria interactiva), secciones. Lo que se lee como **artículo**.
 - **`src/i18n/strings.es.json`** y **`strings.en.json`** → Textos **cortos** que se repiten en toda la web: menú, botones, frases de accesibilidad, descripción por defecto del sitio, pie de página…
 
 El archivo **`src/i18n/ui.ts`** no es para editar frases a mano: **carga** los JSON y define **cómo se construyen las URLs** por idioma. Si solo cambias textos, con los JSON basta.
+
+### 6.1 Trayectoria dentro de «Sobre mí»
+
+La sección **Sobre mí** de la home tiene dos partes: el texto de **`sitePages/.../sobre-mi.md`** (o `about.md` en inglés) y, debajo, la **timeline** leída desde **`src/content/experience/es/`** y **`en/`**.
+
+No hay una sección duplicada «Experiencia» en el menú: es todo **`#about`**.
+
+En **`experience/`**, un **`.md` por etapa laboral** (p. ej. `01-softtek-rm.md`). Frontmatter:
+
+- `order`: número para ordenar (1, 2, 3…).
+- `slug`: identificador **único en todos los `.md` de experience** (ES y EN). Convención: prefijo de idioma, p. ej. `es-softtek-rm` y `en-softtek-rm` para el mismo puesto (no repitas el mismo `slug` en dos archivos: Astro lo usa como id interno).
+- `range`, `title`, `subtitle`, `company`, `meta`: resumen (periodo, rol, cliente…).
+- `draft: false` (si pones `true`, esa etapa no se lista).
+
+Debajo del segundo `---`, el detalle en Markdown (párrafos y listas), igual que en los casos.
 
 ### Cuidado al editar JSON
 
@@ -141,8 +156,8 @@ El archivo **`src/i18n/ui.ts`** no es para editar frases a mano: **carga** los J
 | Casos en **español** | `src/content/projects/es/` (archivos `.md`) |
 | Casos en **inglés** | `src/content/projects/en/` (archivos `.md`) |
 | **Imágenes** de casos (portadas, capturas dentro del texto, etc.) | Carpeta **`public/`** (por ejemplo `public/images/projects/…`); se explica en el **§8** |
-| Texto **Sobre mí** (ES) | `src/content/sitePages/es/sobre-mi.md` |
-| Texto **About** (EN) | `src/content/sitePages/en/about.md` |
+| Texto **Sobre mí** (intro y párrafos) + timeline en la misma sección | `src/content/sitePages/es/sobre-mi.md` y etapas en `src/content/experience/es/*.md` (ver §6.1) |
+| Texto **About** (EN) + timeline | `src/content/sitePages/en/about.md` y `src/content/experience/en/*.md` |
 | **Email** y enlaces LinkedIn / Behance | `src/data/site.ts` |
 | Menú, botones, microcopy, textos de accesibilidad | `src/i18n/strings.es.json` y `strings.en.json` |
 | **Colores**, tipografías base, espaciado general | `src/styles/global.css` |

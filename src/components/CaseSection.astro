@@ -1,0 +1,540 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import { ui, pathForLocale, projectDetailPath, otherLocale, type Locale } from '@/i18n/ui';
+import { findProjectTranslation, projectSlugFromId } from '@/lib/projects';
+import { getPublicAssetUrl } from '@/lib/publicAsset';
+
+interface Props {
+  lang: Locale;
+  entry: CollectionEntry<'projects'>;
+}
+
+const { lang, entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const t = ui[lang];
+const other = otherLocale(lang);
+const alt = await findProjectTranslation(entry.data.pairSlug, other);
+const altSlug = alt ? projectSlugFromId(alt.id, other) : null;
+const altLabel = lang === 'es' ? t.a11y.viewCaseInEnglish : t.a11y.viewCaseInSpanish;
+const slug = projectSlugFromId(entry.id, lang);
+
+const coverSrc = entry.data.cover ? getPublicAssetUrl(entry.data.cover) : undefined;
+const coverAlt = entry.data.coverAlt ?? '';
+const titleId = `case-title-${slug}`;
+
+// Build TOC
+const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+const customSections = [];
+if (entry.data.problem) customSections.push({ slug: 'problem', text: t.projectDetail.problem, depth: 2 });
+if (entry.data.solution) customSections.push({ slug: 'solution', text: t.projectDetail.solution, depth: 2 });
+if (entry.data.tools && entry.data.tools.length > 0) customSections.push({ slug: 'tools', text: t.projectDetail.tools, depth: 2 });
+const allHeadings = [...tocHeadings, ...customSections];
+---
+
+<section class="case-section" aria-labelledby={titleId}>
+  {
+    coverSrc && (
+      <div class="case-hero">
+        <img
+          class="case-hero__img"
+          src={coverSrc}
+          alt={coverAlt}
+          width={1920}
+          height={820}
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+          style={`view-transition-name: cover-${slug}`}
+        />
+        <div class="case-hero__fade" aria-hidden="true" />
+      </div>
+    )
+  }
+  <div class="case-section__content shell">
+    <div class="case-layout">
+      <aside class="case-sidebar">
+        {allHeadings.length > 0 && (
+          <nav class="toc" aria-label="Table of Contents">
+            <ul class="toc__list">
+              {allHeadings.map(h => (
+                <li class={`toc__item toc__item--depth-${h.depth}`}>
+                  <a href={`#${h.slug}`} class="toc__link">{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+      </aside>
+      <article class="article">
+        <header class="article__head">
+          <a class="back" href={pathForLocale(lang, 'root')} aria-label={t.a11y.backToProjects} id="back-to-projects">
+            <span aria-hidden="true">← </span>{t.nav.projects}
+          </a>
+          <p class="article__meta">
+            <time datetime={entry.data.date.toISOString().slice(0, 10)}>{entry.data.date.getFullYear()}</time>
+          </p>
+          <h1 id={titleId} class="article__title">{entry.data.title}</h1>
+          <p class="article__lede">{entry.data.description}</p>
+          {
+            alt && altSlug && (
+              <p class="article__alt">
+                <a href={projectDetailPath(other, altSlug)} hreflang={other} lang={other}>
+                  {altLabel}
+                </a>
+              </p>
+            )
+          }
+        </header>
+        <div class="prose">
+          <Content />
+          {
+            entry.data.problem && (
+              <section class="project-detail__section" id="problem">
+                <h2 class="project-detail__section-title">{t.projectDetail.problem}</h2>
+                <p class="project-detail__section-text">{entry.data.problem}</p>
+              </section>
+            )
+          }
+          {
+            entry.data.solution && (
+              <section class="project-detail__section" id="solution">
+                <h2 class="project-detail__section-title">{t.projectDetail.solution}</h2>
+                <p class="project-detail__section-text">{entry.data.solution}</p>
+              </section>
+            )
+          }
+          {
+            entry.data.tools && entry.data.tools.length > 0 && (
+              <section class="project-detail__section" id="tools">
+                <h2 class="project-detail__section-title">{t.projectDetail.tools}</h2>
+                <ul class="project-detail__tools">
+                  {entry.data.tools.map((tool) => (
+                    <li class="project-detail__tool">{tool}</li>
+                  ))}
+                </ul>
+              </section>
+            )
+          }
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  function initCaseEffects() {
+    // 1. Ambient Color Extraction
+    const heroImg = document.querySelector('.case-hero__img');
+    if (heroImg && heroImg.tagName === 'IMG') {
+      const extractColor = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = 1; canvas.height = 1;
+          ctx.drawImage(heroImg, 0, 0, 1, 1);
+          const data = ctx.getImageData(0, 0, 1, 1).data;
+          if (data[3] > 0) { // If not completely transparent
+            document.documentElement.style.setProperty('--project-color', `${data[0]}, ${data[1]}, ${data[2]}`);
+          }
+        } catch (e) {
+          // Ignore cross-origin canvas errors if any
+        }
+      };
+      if (heroImg.complete) extractColor();
+      else heroImg.addEventListener('load', extractColor);
+    }
+
+    // 2. TOC ScrollSpy & Smooth Scroll
+    const tocLinks = document.querySelectorAll('.toc__link');
+    const headingEls = Array.from(document.querySelectorAll('.prose h2, .prose h3, .project-detail__section'));
+
+    // Smooth scroll for TOC links
+    tocLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (!href || !href.startsWith('#')) return;
+        const target = document.getElementById(href.slice(1));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+          if (window.history.replaceState) {
+            window.history.replaceState(window.history.state, '', href);
+          }
+        }
+      });
+    });
+
+    // Robust ScrollSpy
+    let isSpying = false;
+    const updateSpy = () => {
+      if (isSpying) return;
+      isSpying = true;
+      requestAnimationFrame(() => {
+        const focusY = window.innerHeight * 0.3; // Top 30% of screen
+        let currentId = '';
+
+        // Find the last heading that has scrolled past the focus line
+        for (const el of headingEls) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= focusY) {
+            currentId = el.id;
+          } else {
+            break; // Headings are in order, stop once we find one below the line
+          }
+        }
+
+        // Fallback: if no heading is above the line, highlight the first one
+        if (!currentId && headingEls.length > 0) {
+           const firstRect = headingEls[0].getBoundingClientRect();
+           if (firstRect.top > 0 && firstRect.top < window.innerHeight) {
+               currentId = headingEls[0].id;
+           }
+        }
+
+        // If scrolled to bottom, highlight the last one
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 10) {
+          if (headingEls.length > 0) currentId = headingEls[headingEls.length - 1].id;
+        }
+
+        if (currentId) {
+          tocLinks.forEach(l => {
+            if (l.getAttribute('href') === `#${currentId}`) {
+              l.classList.add('is-active');
+            } else {
+              l.classList.remove('is-active');
+            }
+          });
+        }
+
+        isSpying = false;
+      });
+    };
+
+    window.addEventListener('scroll', updateSpy, { passive: true });
+    updateSpy(); // init
+
+    // 3. Fluid Image Zoom (Lightbox)
+    const overlay = document.getElementById('lightbox-overlay') || document.createElement('div');
+    if (!overlay.id) {
+      overlay.id = 'lightbox-overlay';
+      overlay.className = 'lightbox-overlay';
+      document.body.appendChild(overlay);
+    }
+
+    let activeClone = null;
+
+    const closeLightbox = () => {
+      if (activeClone) {
+        activeClone.classList.remove('is-zoomed');
+        overlay.classList.remove('is-visible');
+        setTimeout(() => {
+          if (activeClone) activeClone.remove();
+          activeClone = null;
+        }, 400);
+      }
+    };
+
+    overlay.addEventListener('click', closeLightbox);
+    window.addEventListener('scroll', closeLightbox, { passive: true });
+
+    document.querySelectorAll('.prose img').forEach(img => {
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (activeClone) return;
+        
+        const rect = img.getBoundingClientRect();
+        activeClone = img.cloneNode();
+        activeClone.className = 'lightbox-img';
+        
+        // Set initial position to match original image
+        activeClone.style.top = `${rect.top}px`;
+        activeClone.style.left = `${rect.left}px`;
+        activeClone.style.width = `${rect.width}px`;
+        activeClone.style.height = `${rect.height}px`;
+        
+        document.body.appendChild(activeClone);
+        overlay.classList.add('is-visible');
+        
+        // Force reflow
+        void activeClone.offsetWidth;
+        
+        // Animate to center
+        activeClone.classList.add('is-zoomed');
+      });
+    });
+
+    // Back Button Logic
+    const backBtn = document.getElementById('back-to-projects');
+    if (backBtn) {
+      backBtn.addEventListener('click', (e) => {
+        if (window.hasNavigatedInternally && window.history.length > 1) {
+          e.preventDefault();
+          
+          // If we are navigating back, we must pop ALL hash states that were added by the TOC
+          // until we actually leave the page.
+          const currentPath = window.location.pathname;
+          
+          const goBack = () => {
+            if (window.location.pathname === currentPath) {
+              window.history.back();
+            } else {
+              window.removeEventListener('popstate', goBack);
+            }
+          };
+          
+          window.addEventListener('popstate', goBack);
+          window.history.back();
+        }
+      });
+    }
+  }
+
+  // Cleanup on page leave
+  document.addEventListener('astro:before-preparation', () => {
+    document.documentElement.style.removeProperty('--project-color');
+    const overlay = document.getElementById('lightbox-overlay');
+    if (overlay) overlay.remove();
+    const clone = document.querySelector('.lightbox-img');
+    if (clone) clone.remove();
+  });
+
+  document.addEventListener('astro:page-load', initCaseEffects);
+</script>
+
+<style>
+  /* Case Layout with Sidebar */
+  .case-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+
+  .case-sidebar {
+    display: none;
+    position: sticky;
+    top: 8rem;
+    max-height: calc(100vh - 10rem);
+    overflow-y: auto;
+  }
+
+  @media (min-width: 64rem) {
+    .case-layout {
+      grid-template-columns: 240px 1fr;
+      align-items: start;
+    }
+    .case-sidebar {
+      display: block;
+      order: 1;
+    }
+    .article {
+      order: 2;
+    }
+  }
+
+  /* Table of Contents */
+  .toc__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .toc__link {
+    display: block;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+    border-left: 2px solid transparent;
+    padding-left: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .toc__item--depth-3 .toc__link {
+    padding-left: 1.5rem;
+    font-size: 0.8rem;
+  }
+
+  .toc__link:hover {
+    color: var(--text);
+  }
+
+  .toc__link.is-active {
+    color: var(--text);
+    border-left-color: rgb(var(--project-color, var(--text)));
+    font-weight: 500;
+  }
+
+  .case-section {
+    padding: 0;
+    border-top: none;
+  }
+
+  .case-hero {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    max-height: min(72vh, 720px);
+    overflow: hidden;
+    background: var(--bg-wash);
+  }
+
+  .case-hero__img {
+    width: 100%;
+    height: min(72vh, 720px);
+    object-fit: cover;
+    display: block;
+    transform: scale(1.01);
+  }
+
+  .case-hero__fade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      transparent 35%,
+      color-mix(in oklab, var(--bg) 55%, transparent) 88%,
+      var(--bg) 100%
+    );
+    pointer-events: none;
+  }
+
+  .case-section__content {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-3xl);
+    border-top: 1px solid var(--border);
+  }
+
+  .case-hero + .case-section__content {
+    border-top: none;
+    padding-top: var(--space-xl);
+  }
+
+  .article {
+    max-width: var(--editorial-width);
+    margin: 0 auto;
+  }
+
+  .article__head {
+    margin-bottom: var(--space-xl);
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: var(--tap-min);
+    margin-bottom: var(--space-md);
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-muted);
+  }
+
+  .back:hover {
+    color: var(--text);
+  }
+
+  .article__meta {
+    margin: 0 0 var(--space-xs);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .article__title {
+    margin: 0 0 var(--space-sm);
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 2.85rem);
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+
+  .article__lede {
+    margin: 0;
+    font-size: 1.08rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .article__alt {
+    margin: var(--space-md) 0 0;
+    font-size: 0.95rem;
+  }
+
+  .project-detail__section {
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-lg);
+  }
+
+  .project-detail__section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+    color: var(--text);
+  }
+
+  .project-detail__section-text {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin: 0 0 var(--space-md) 0;
+  }
+
+  .project-detail__tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .project-detail__tool {
+    background: var(--border);
+    border-radius: 6px;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+  }
+  .lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background: color-mix(in oklab, var(--bg) 95%, transparent);
+    backdrop-filter: blur(8px);
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .lightbox-overlay.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    cursor: zoom-out;
+  }
+
+  :global(.lightbox-img) {
+    position: fixed;
+    z-index: 9999;
+    object-fit: contain;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: zoom-out;
+    border-radius: var(--radius);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.15);
+  }
+
+  :global(.lightbox-img.is-zoomed) {
+    top: 5vh !important;
+    left: 5vw !important;
+    width: 90vw !important;
+    height: 90vh !important;
+  }
+</style>
