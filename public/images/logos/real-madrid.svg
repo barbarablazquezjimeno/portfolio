@@ -1,0 +1,9 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="none"/>
+  <!-- Real Madrid: Shield style -->
+  <g transform="translate(100, 100)">
+    <path d="M 0,-40 L 30,-20 L 30,20 Q 0,40 -30,20 L -30,-20 Z" fill="none" stroke="#1a5e52" stroke-width="2.5"/>
+    <circle cx="0" cy="0" r="15" fill="none" stroke="#1a5e52" stroke-width="2"/>
+    <text x="0" y="6" font-size="18" font-weight="bold" text-anchor="middle" fill="#1a5e52" font-family="Arial">RM</text>
+  </g>
+</svg>

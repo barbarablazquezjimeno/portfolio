@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   color-scheme: light dark;
   --bg: #faf9f7;

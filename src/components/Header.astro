@@ -19,10 +19,12 @@ function linkFor(page: 'home' | 'projects' | 'about' | 'contact') {
   return pathForLocale(lang, page);
 }
 
+
 const nav = [
-  { href: linkFor('home'), label: t.nav.home },
-  { href: linkFor('projects'), label: t.nav.projects },
-  { href: linkFor('about'), label: t.nav.about },
+  { href: '#hero', label: t.nav.home },
+  { href: '#sobre-mi', label: t.nav.about },
+  { href: '#proyectos', label: t.nav.projects },
+  { href: '#contacto', label: t.nav.contact },
 ];
 
 function active(href: string) {
@@ -49,8 +51,7 @@ function active(href: string) {
               <li class="site-nav__item">
                 <a
                   href={item.href}
-                  class:list={['site-nav__link', { 'site-nav__link--active': active(item.href) }]}
-                  aria-current={active(item.href) ? 'page' : undefined}
+                  class="site-nav__link"
                 >
                   {item.label}
                 </a>
