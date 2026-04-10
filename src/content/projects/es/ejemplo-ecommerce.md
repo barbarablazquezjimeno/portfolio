@@ -1,6 +1,6 @@
 ---
 title: Logístic App
-description: Solución de problemas en almacenes
+description: El proceso actual de entrada de mercancía obliga a los operarios a registrar las piezas una a una. Cuando un envío llega incompleto (ej. una pieza notificada por el proveedor que no llegó a cargar), el sistema no permite realizar una entrada masiva con excepciones. Esto genera errores en el cálculo real de dimensiones (metros) y una carga operativa excesiva al no poder 'seleccionar todo' y desmarcar el elemento faltante
 overline: UX/UI Product Designer
 date: 2024-11-10
 pairSlug: ecommerce-checkout
