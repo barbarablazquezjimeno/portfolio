@@ -1,12 +1,18 @@
 ---
-import { render, type CollectionEntry } from 'astro:content';
-import { ui, pathForLocale, projectDetailPath, otherLocale, type Locale } from '@/i18n/ui';
-import { findProjectTranslation, projectSlugFromId } from '@/lib/projects';
-import { getPublicAssetUrl } from '@/lib/publicAsset';
+import { render, type CollectionEntry } from "astro:content";
+import {
+  ui,
+  pathForLocale,
+  projectDetailPath,
+  otherLocale,
+  type Locale,
+} from "@/i18n/ui";
+import { findProjectTranslation, projectSlugFromId } from "@/lib/projects";
+import { getPublicAssetUrl } from "@/lib/publicAsset";
 
 interface Props {
   lang: Locale;
-  entry: CollectionEntry<'projects'>;
+  entry: CollectionEntry<"projects">;
 }
 
 const { lang, entry } = Astro.props;
@@ -15,19 +21,33 @@ const t = ui[lang];
 const other = otherLocale(lang);
 const alt = await findProjectTranslation(entry.data.pairSlug, other);
 const altSlug = alt ? projectSlugFromId(alt.id, other) : null;
-const altLabel = lang === 'es' ? t.a11y.viewCaseInEnglish : t.a11y.viewCaseInSpanish;
+const altLabel =
+  lang === "es" ? t.a11y.viewCaseInEnglish : t.a11y.viewCaseInSpanish;
 const slug = projectSlugFromId(entry.id, lang);
 
-const coverSrc = entry.data.cover ? getPublicAssetUrl(entry.data.cover) : undefined;
-const coverAlt = entry.data.coverAlt ?? '';
+const coverSrc = entry.data.cover
+  ? getPublicAssetUrl(entry.data.cover)
+  : undefined;
+const coverAlt = entry.data.coverAlt ?? "";
 const titleId = `case-title-${slug}`;
 
 // Build TOC
-const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const customSections = [];
-if (entry.data.problem) customSections.push({ slug: 'problem', text: t.projectDetail.problem, depth: 2 });
-if (entry.data.solution) customSections.push({ slug: 'solution', text: t.projectDetail.solution, depth: 2 });
-if (entry.data.tools && entry.data.tools.length > 0) customSections.push({ slug: 'tools', text: t.projectDetail.tools, depth: 2 });
+if (entry.data.problem)
+  customSections.push({
+    slug: "problem",
+    text: t.projectDetail.problem,
+    depth: 2,
+  });
+if (entry.data.solution)
+  customSections.push({
+    slug: "solution",
+    text: t.projectDetail.solution,
+    depth: 2,
+  });
+if (entry.data.tools && entry.data.tools.length > 0)
+  customSections.push({ slug: "tools", text: t.projectDetail.tools, depth: 2 });
 const allHeadings = [...tocHeadings, ...customSections];
 ---
 
@@ -53,33 +73,49 @@ const allHeadings = [...tocHeadings, ...customSections];
   <div class="case-section__content shell">
     <div class="case-layout">
       <aside class="case-sidebar">
-        {allHeadings.length > 0 && (
-          <nav class="toc" aria-label="Table of Contents">
-            <ul class="toc__list">
-              {allHeadings.map(h => (
-                <li class={`toc__item toc__item--depth-${h.depth}`}>
-                  <a href={`#${h.slug}`} class="toc__link">{h.text}</a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
+        {
+          allHeadings.length > 0 && (
+            <nav class="toc" aria-label="Table of Contents">
+              <ul class="toc__list">
+                {allHeadings.map((h) => (
+                  <li class={`toc__item toc__item--depth-${h.depth}`}>
+                    <a href={`#${h.slug}`} class="toc__link">
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )
+        }
       </aside>
       <article class="article">
         <header class="article__head">
-          <a class="back" href={pathForLocale(lang, 'root')} aria-label={t.a11y.backToProjects} id="back-to-projects">
+          <a
+            class="back"
+            href={pathForLocale(lang, "root")}
+            aria-label={t.a11y.backToProjects}
+            id="back-to-projects"
+          >
             <span aria-hidden="true">← </span>{t.nav.projects}
           </a>
           <p class="article__meta">
-            <time datetime={entry.data.date.toISOString().slice(0, 10)}>{entry.data.date.getFullYear()}</time>
+            <time datetime={entry.data.date.toISOString().slice(0, 10)}
+              >{entry.data.date.getFullYear()}</time
+            >
           </p>
           <h1 id={titleId} class="article__title">{entry.data.title}</h1>
           <p class="article__lede">{entry.data.description}</p>
+
           {
-            alt && altSlug && (
+            entry.data.externalUrl && (
               <p class="article__alt">
-                <a href={projectDetailPath(other, altSlug)} hreflang={other} lang={other}>
-                  {altLabel}
+                <a
+                  href={entry.data.externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {entry.data.externalLabel}
                 </a>
               </p>
             )
@@ -90,7 +126,9 @@ const allHeadings = [...tocHeadings, ...customSections];
           {
             entry.data.problem && (
               <section class="project-detail__section" id="problem">
-                <h2 class="project-detail__section-title">{t.projectDetail.problem}</h2>
+                <h2 class="project-detail__section-title">
+                  {t.projectDetail.problem}
+                </h2>
                 <p class="project-detail__section-text">{entry.data.problem}</p>
               </section>
             )
@@ -98,15 +136,21 @@ const allHeadings = [...tocHeadings, ...customSections];
           {
             entry.data.solution && (
               <section class="project-detail__section" id="solution">
-                <h2 class="project-detail__section-title">{t.projectDetail.solution}</h2>
-                <p class="project-detail__section-text">{entry.data.solution}</p>
+                <h2 class="project-detail__section-title">
+                  {t.projectDetail.solution}
+                </h2>
+                <p class="project-detail__section-text">
+                  {entry.data.solution}
+                </p>
               </section>
             )
           }
           {
             entry.data.tools && entry.data.tools.length > 0 && (
               <section class="project-detail__section" id="tools">
-                <h2 class="project-detail__section-title">{t.projectDetail.tools}</h2>
+                <h2 class="project-detail__section-title">
+                  {t.projectDetail.tools}
+                </h2>
                 <ul class="project-detail__tools">
                   {entry.data.tools.map((tool) => (
                     <li class="project-detail__tool">{tool}</li>
@@ -124,41 +168,50 @@ const allHeadings = [...tocHeadings, ...customSections];
 <script is:inline>
   function initCaseEffects() {
     // 1. Ambient Color Extraction
-    const heroImg = document.querySelector('.case-hero__img');
-    if (heroImg && heroImg.tagName === 'IMG') {
+    const heroImg = document.querySelector(".case-hero__img");
+    if (heroImg && heroImg.tagName === "IMG") {
       const extractColor = () => {
         try {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          canvas.width = 1; canvas.height = 1;
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          canvas.width = 1;
+          canvas.height = 1;
           ctx.drawImage(heroImg, 0, 0, 1, 1);
           const data = ctx.getImageData(0, 0, 1, 1).data;
-          if (data[3] > 0) { // If not completely transparent
-            document.documentElement.style.setProperty('--project-color', `${data[0]}, ${data[1]}, ${data[2]}`);
+          if (data[3] > 0) {
+            // If not completely transparent
+            document.documentElement.style.setProperty(
+              "--project-color",
+              `${data[0]}, ${data[1]}, ${data[2]}`,
+            );
           }
         } catch (e) {
           // Ignore cross-origin canvas errors if any
         }
       };
       if (heroImg.complete) extractColor();
-      else heroImg.addEventListener('load', extractColor);
+      else heroImg.addEventListener("load", extractColor);
     }
 
     // 2. TOC ScrollSpy & Smooth Scroll
-    const tocLinks = document.querySelectorAll('.toc__link');
-    const headingEls = Array.from(document.querySelectorAll('.prose h2, .prose h3, .project-detail__section'));
+    const tocLinks = document.querySelectorAll(".toc__link");
+    const headingEls = Array.from(
+      document.querySelectorAll(
+        ".prose h2, .prose h3, .project-detail__section",
+      ),
+    );
 
     // Smooth scroll for TOC links
-    tocLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        if (!href || !href.startsWith('#')) return;
+    tocLinks.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const href = link.getAttribute("href");
+        if (!href || !href.startsWith("#")) return;
         const target = document.getElementById(href.slice(1));
         if (target) {
           e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth' });
+          target.scrollIntoView({ behavior: "smooth" });
           if (window.history.replaceState) {
-            window.history.replaceState(window.history.state, '', href);
+            window.history.replaceState(window.history.state, "", href);
           }
         }
       });
@@ -171,7 +224,7 @@ const allHeadings = [...tocHeadings, ...customSections];
       isSpying = true;
       requestAnimationFrame(() => {
         const focusY = window.innerHeight * 0.3; // Top 30% of screen
-        let currentId = '';
+        let currentId = "";
 
         // Find the last heading that has scrolled past the focus line
         for (const el of headingEls) {
@@ -185,23 +238,27 @@ const allHeadings = [...tocHeadings, ...customSections];
 
         // Fallback: if no heading is above the line, highlight the first one
         if (!currentId && headingEls.length > 0) {
-           const firstRect = headingEls[0].getBoundingClientRect();
-           if (firstRect.top > 0 && firstRect.top < window.innerHeight) {
-               currentId = headingEls[0].id;
-           }
+          const firstRect = headingEls[0].getBoundingClientRect();
+          if (firstRect.top > 0 && firstRect.top < window.innerHeight) {
+            currentId = headingEls[0].id;
+          }
         }
 
         // If scrolled to bottom, highlight the last one
-        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 10) {
-          if (headingEls.length > 0) currentId = headingEls[headingEls.length - 1].id;
+        if (
+          window.innerHeight + window.scrollY >=
+          document.documentElement.scrollHeight - 10
+        ) {
+          if (headingEls.length > 0)
+            currentId = headingEls[headingEls.length - 1].id;
         }
 
         if (currentId) {
-          tocLinks.forEach(l => {
-            if (l.getAttribute('href') === `#${currentId}`) {
-              l.classList.add('is-active');
+          tocLinks.forEach((l) => {
+            if (l.getAttribute("href") === `#${currentId}`) {
+              l.classList.add("is-active");
             } else {
-              l.classList.remove('is-active');
+              l.classList.remove("is-active");
             }
           });
         }
@@ -210,14 +267,16 @@ const allHeadings = [...tocHeadings, ...customSections];
       });
     };
 
-    window.addEventListener('scroll', updateSpy, { passive: true });
+    window.addEventListener("scroll", updateSpy, { passive: true });
     updateSpy(); // init
 
     // 3. Fluid Image Zoom (Lightbox)
-    const overlay = document.getElementById('lightbox-overlay') || document.createElement('div');
+    const overlay =
+      document.getElementById("lightbox-overlay") ||
+      document.createElement("div");
     if (!overlay.id) {
-      overlay.id = 'lightbox-overlay';
-      overlay.className = 'lightbox-overlay';
+      overlay.id = "lightbox-overlay";
+      overlay.className = "lightbox-overlay";
       document.body.appendChild(overlay);
     }
 
@@ -225,8 +284,8 @@ const allHeadings = [...tocHeadings, ...customSections];
 
     const closeLightbox = () => {
       if (activeClone) {
-        activeClone.classList.remove('is-zoomed');
-        overlay.classList.remove('is-visible');
+        activeClone.classList.remove("is-zoomed");
+        overlay.classList.remove("is-visible");
         setTimeout(() => {
           if (activeClone) activeClone.remove();
           activeClone = null;
@@ -234,56 +293,56 @@ const allHeadings = [...tocHeadings, ...customSections];
       }
     };
 
-    overlay.addEventListener('click', closeLightbox);
-    window.addEventListener('scroll', closeLightbox, { passive: true });
+    overlay.addEventListener("click", closeLightbox);
+    window.addEventListener("scroll", closeLightbox, { passive: true });
 
-    document.querySelectorAll('.prose img').forEach(img => {
-      img.style.cursor = 'zoom-in';
-      img.addEventListener('click', (e) => {
+    document.querySelectorAll(".prose img").forEach((img) => {
+      img.style.cursor = "zoom-in";
+      img.addEventListener("click", (e) => {
         e.stopPropagation();
         if (activeClone) return;
-        
+
         const rect = img.getBoundingClientRect();
         activeClone = img.cloneNode();
-        activeClone.className = 'lightbox-img';
-        
+        activeClone.className = "lightbox-img";
+
         // Set initial position to match original image
         activeClone.style.top = `${rect.top}px`;
         activeClone.style.left = `${rect.left}px`;
         activeClone.style.width = `${rect.width}px`;
         activeClone.style.height = `${rect.height}px`;
-        
+
         document.body.appendChild(activeClone);
-        overlay.classList.add('is-visible');
-        
+        overlay.classList.add("is-visible");
+
         // Force reflow
         void activeClone.offsetWidth;
-        
+
         // Animate to center
-        activeClone.classList.add('is-zoomed');
+        activeClone.classList.add("is-zoomed");
       });
     });
 
     // Back Button Logic
-    const backBtn = document.getElementById('back-to-projects');
+    const backBtn = document.getElementById("back-to-projects");
     if (backBtn) {
-      backBtn.addEventListener('click', (e) => {
+      backBtn.addEventListener("click", (e) => {
         if (window.hasNavigatedInternally && window.history.length > 1) {
           e.preventDefault();
-          
+
           // If we are navigating back, we must pop ALL hash states that were added by the TOC
           // until we actually leave the page.
           const currentPath = window.location.pathname;
-          
+
           const goBack = () => {
             if (window.location.pathname === currentPath) {
               window.history.back();
             } else {
-              window.removeEventListener('popstate', goBack);
+              window.removeEventListener("popstate", goBack);
             }
           };
-          
-          window.addEventListener('popstate', goBack);
+
+          window.addEventListener("popstate", goBack);
           window.history.back();
         }
       });
@@ -291,15 +350,15 @@ const allHeadings = [...tocHeadings, ...customSections];
   }
 
   // Cleanup on page leave
-  document.addEventListener('astro:before-preparation', () => {
-    document.documentElement.style.removeProperty('--project-color');
-    const overlay = document.getElementById('lightbox-overlay');
+  document.addEventListener("astro:before-preparation", () => {
+    document.documentElement.style.removeProperty("--project-color");
+    const overlay = document.getElementById("lightbox-overlay");
     if (overlay) overlay.remove();
-    const clone = document.querySelector('.lightbox-img');
+    const clone = document.querySelector(".lightbox-img");
     if (clone) clone.remove();
   });
 
-  document.addEventListener('astro:page-load', initCaseEffects);
+  document.addEventListener("astro:page-load", initCaseEffects);
 </script>
 
 <style>
@@ -347,7 +406,9 @@ const allHeadings = [...tocHeadings, ...customSections];
     color: var(--text-muted);
     text-decoration: none;
     font-size: 0.85rem;
-    transition: color 0.2s ease, transform 0.2s ease;
+    transition:
+      color 0.2s ease,
+      transform 0.2s ease;
     border-left: 2px solid transparent;
     padding-left: 0.75rem;
     line-height: 1.4;
@@ -528,7 +589,7 @@ const allHeadings = [...tocHeadings, ...customSections];
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     cursor: zoom-out;
     border-radius: var(--radius);
-    box-shadow: 0 24px 60px rgba(0,0,0,0.15);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15);
   }
 
   :global(.lightbox-img.is-zoomed) {

@@ -16,6 +16,8 @@ const projects = defineCollection({
     coverAlt: z.string().optional(),
     overline: z.string().optional(),
     cta: z.string().optional(),
+    externalUrl: z.string().url().optional(),
+    externalLabel: z.string().optional(),
     problem: z.string().optional(),
     solution: z.string().optional(),
     tools: z.array(z.string()).optional(),

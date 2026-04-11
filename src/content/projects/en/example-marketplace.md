@@ -7,6 +7,8 @@ featured: true
 cover: https://images.unsplash.com/photo-1556155092-490a1ba16284?auto=format&fit=crop&q=80&w=1200
 coverAlt: Wearable solution for logistics picking
 cta: "See marketplace case"
+externalUrl: "https://www.behance.net/tu-perfil/proyecto"
+externalLabel: "Ver caso en Behance"
 ---
 
 ## Problem

@@ -14,7 +14,8 @@ meta: MOBILE · WEB
 - Concept, Research y Diseño, utilizando metodologías de diseño centrado en el usuario para validar nuevas funcionalidades.
 - Facilitación de sesiones de Brainstorming y co-creación con stakeholders para idear soluciones innovadoras a problemas complejos. 
 
-- Herramientas: _PERPLEXITY_ | _ACCESIBILIDAD_ | _GOOGLE AI STUDIO_ | _STICH_ | _COPILOT_ | _FIGMA MAKE_ | _DESIGN SYSTEM_
+- Herramientas: 
+ | _ACCESIBILIDAD_ | _GOOGLE AI STUDIO_ | _STICH_ | _COPILOT_ | _FIGMA MAKE_ | _DESIGN SYSTEM_
  
 
 

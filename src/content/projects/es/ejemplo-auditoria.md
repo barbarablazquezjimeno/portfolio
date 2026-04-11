@@ -2,12 +2,15 @@
 title: Auditoría accesibilidad web
 description: Revisión y auditoria de cumplimiento de WCAG2
 date: 2026-01-15
+overline: WEB | APP
 pairSlug: onboarding-banking
 featured: true
 cover: https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1200
 coverAlt: Portada referente a un análisis de accesibilidad
 skills: ["WCAG2", "ACCESIBILIDAD", "AUDITORIA"]
 cta: "Ver análisis"
+externalUrl: "https://www.behance.net/tu-perfil/proyecto"
+externalLabel: "Ver detalles de la auditoria"
 ---
 
 ## Contexto
