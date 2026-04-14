@@ -6,14 +6,13 @@ overline: MOVILE
 pairSlug: inditex-inventory
 featured: false
 cover: https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1200
-coverAlt: Retail clothing store and logistics
+coverAlt: Sistema de diseño
 skills: ["Process Design", "Lean", "UX Research"]
-externalUrl: "https://www.behance.net/tu-perfil/proyecto"
+externalUrl: "https://www.figma.com/proto/z2nauo59X3MQVSU80AQQgc/Accesibilidad-Web-y-App---Real-Madrid?node-id=1-11030&t=SeJJU2sOv9KYP4qD-1&scaling=contain&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A11030&show-proto-sidebar=1"
 externalLabel: "Ver caso en Behance"
 ---
 
 ## Contexto
-
    La ausencia de un sistema centralizado generaba inconsistencias visuales entre plataformas, duplicidad de esfuerzos en diseño y desarrollo, y una falta de estándares claros para componentes móviles, lo que dificultaba el mantenimiento y la evolución ágil del producto.
 
 

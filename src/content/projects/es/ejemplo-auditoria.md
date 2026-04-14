@@ -5,11 +5,11 @@ date: 2026-01-15
 overline: WEB | APP
 pairSlug: onboarding-banking
 featured: true
-cover: https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1200
+cover:  /images/projects/Accesibilidad.png
 coverAlt: Portada referente a un análisis de accesibilidad
 skills: ["WCAG2", "ACCESIBILIDAD", "AUDITORIA"]
 cta: "Ver análisis"
-externalUrl: "https://www.behance.net/tu-perfil/proyecto"
+externalUrl: "https://www.figma.com/proto/z2nauo59X3MQVSU80AQQgc/Accesibilidad-Web-y-App---Real-Madrid?node-id=1-11030&t=SeJJU2sOv9KYP4qD-1&scaling=contain&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A11030&show-proto-sidebar=1"
 externalLabel: "Ver detalles de la auditoria"
 ---
 
@@ -30,3 +30,5 @@ Se evaluaron componentes, patrones reutilizables y flujos críticos para identif
 
 La auditoría se enfocó en evaluar el cumplimiento de los criterios de accesibilidad WCAG 2.1 niveles A y AA desde una perspectiva funcional y de experiencia de usuario, analizando tipografía, contraste, navegación, interacción y entrada de datos.
 El resultado muestra un nivel de cumplimiento medio del 35%, con una base sólida en formularios y contenido dinámico, pero con carencias importantes en legibilidad, foco de navegación e interacción, que requieren rediseño prioritario.
+
+## Herramientas
