@@ -9,8 +9,9 @@ cover: https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&
 coverAlt: Operativa logística en almacén
 skills: ["Figma", "User Research", "Prototyping"]
 cta: "Ver caso de logística"
-externalUrl: "https://www.behance.net/tu-perfil/proyecto"
 externalLabel: "Ver caso en Behance"
+internalRoute: "src/pages/HomePage"
+internalLabel: "Acceder al archivo"
 ---
 
 ## Contexto

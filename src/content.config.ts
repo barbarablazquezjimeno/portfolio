@@ -2,9 +2,11 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
+
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
-  schema: z.object({
+  schema: z
+  .object({
     title: z.string(),
     description: z.string(),
     date: z.coerce.date(),
@@ -18,13 +20,23 @@ const projects = defineCollection({
     cta: z.string().optional(),
     externalUrl: z.string().url().optional(),
     externalLabel: z.string().optional(),
+    internalRoute: z.string().optional(),
+    internalLabel: z.string().optional(),
     problem: z.string().optional(),
     solution: z.string().optional(),
     tools: z.array(z.string()).optional(),
     skills: z.array(z.string()).optional(),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
-  }),
+  })
+  .refine(      
+    (data) =>        
+    !!data.internalRoute !== !!data.externalUrl,      
+  {        
+    message:          
+    "A project must have either internalRoute or externalUrl (but not both).",      
+  },    
+),
 });
 
 const sitePages = defineCollection({
@@ -56,3 +68,4 @@ export const collections = {
   sitePages,
   experience,
 };
+

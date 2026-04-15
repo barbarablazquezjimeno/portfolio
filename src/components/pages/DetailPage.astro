@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CaseSection from '@/components/CaseSection.astro';
+import type { Locale } from '@/i18n/ui';
+import { ui } from '@/i18n/ui';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang, entry } = Astro.props;
+const t = ui[lang];
+---
+<BaseLayout lang={lang} title={t.metaTitle} description={t.metaDescription}>
+  <div class="one-page" data-one-page>
+    <div class="scroll-progress-track" aria-hidden="true">
+      <div class="scroll-progress" id="scroll-progress"></div>
+    </div>
+    <section id="top" class="hero hero--editorial hero--parallax" aria-labelledby="hero-title">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="shell hero__inner hero-animate">
+        <p class="hero__kicker">{t.home.kicker}</p>
+        <h1 id="hero-title" class="hero__title">{t.home.headline}</h1>
+        <p class="hero__sub">{t.home.sub}</p>
+        </div>
+      </div>
+    </section>
+</BaseLayout>
+

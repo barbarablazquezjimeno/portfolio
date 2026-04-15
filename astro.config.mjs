@@ -14,3 +14,4 @@ export default defineConfig({
   trailingSlash: 'always',
   integrations: [icon()],
 });
+
