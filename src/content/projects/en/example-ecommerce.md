@@ -9,7 +9,7 @@ coverAlt: Logistics operations in a warehouse
 skills: ["Conversion Optimization", "A/B Testing", "Payment UX"]
 cta: "See checkout case"
 externalUrl: "https://www.behance.net/tu-perfil/proyecto"
-externalLabel: "Ver caso en Behance"
+
 ---
 
 ## Problem

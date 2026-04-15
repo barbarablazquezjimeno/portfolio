@@ -20,7 +20,6 @@ const projects = defineCollection({
     cta: z.string().optional(),
     externalUrl: z.string().url().optional(),
     externalLabel: z.string().optional(),
-    internalRoute: z.string().optional(),
     internalLabel: z.string().optional(),
     problem: z.string().optional(),
     solution: z.string().optional(),
@@ -29,14 +28,6 @@ const projects = defineCollection({
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
   })
-  .refine(      
-    (data) =>        
-    !!data.internalRoute !== !!data.externalUrl,      
-  {        
-    message:          
-    "A project must have either internalRoute or externalUrl (but not both).",      
-  },    
-),
 });
 
 const sitePages = defineCollection({

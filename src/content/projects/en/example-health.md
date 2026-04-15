@@ -8,7 +8,7 @@ cover: https://images.unsplash.com/photo-1576091160550-21735999181c?auto=format&
 coverAlt: Digital health application showing medical metrics
 cta: "See health dashboard"
 externalUrl: "https://www.behance.net/tu-perfil/proyecto"
-externalLabel: "Ver caso en Behance"
+
 ---
 
 ## Summary

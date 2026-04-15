@@ -9,7 +9,6 @@ coverAlt: Digital banking interface on a smartphone
 skills: ["User Research", "Design System", "Usability Testing"]
 cta: "See onboarding case"
 externalUrl: "https://www.behance.net/tu-perfil/proyecto"
-externalLabel: "Ver caso en Behance" 
 ---
 
 ## Context

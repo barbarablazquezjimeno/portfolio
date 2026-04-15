@@ -36,6 +36,13 @@ export function projectDetailPath(locale: Locale, slug: string): string {
   return `${root}${segment}/`;
 }
 
+/** URL internal. */
+export function staticPath(name: string): string {
+  const base = import.meta.env.BASE_URL || '/';
+  const root = base.endsWith('/') ? base : `${base}/`;
+  return `${root}${name}/`;
+}
+
 export function otherLocale(locale: Locale): Locale {
   return locale === 'es' ? 'en' : 'es';
 }

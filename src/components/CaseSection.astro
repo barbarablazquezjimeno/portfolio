@@ -6,6 +6,7 @@ import {
   projectDetailPath,
   otherLocale,
   type Locale,
+staticPath,
 } from "@/i18n/ui";
 import { findProjectTranslation, projectSlugFromId } from "@/lib/projects";
 import { getPublicAssetUrl } from "@/lib/publicAsset";
@@ -106,19 +107,20 @@ const allHeadings = [...tocHeadings, ...customSections];
             >
           </p>
           <h1 id={titleId} class="article__title">{entry.data.title}</h1>
-          <p class="article__alt article__actions">
-            {/* Enlace interno */}   
+          <p class="article__alt article__actions">  
+            
             {
-              entry.data.internalRoute && (      
+              entry.data.internalLabel && (      
               <a        
-              href={entry.data.internalRoute}        
-              class="article__link article__link--internal"      
+              href={staticPath('protect')}       
+              class="article__link article__link--internal"
+              aria-label={t.a11y.viewCase}
               >        
-                {entry.data.internalLabel ?? t.projectDetail.viewCase}    
+              {entry.data.internalLabel}
                 </a>    
                 )
               }
-          {/* Enlace externo */}
+
            {
             entry.data.externalUrl && (
                 <a
@@ -133,7 +135,7 @@ const allHeadings = [...tocHeadings, ...customSections];
           }
          </p>
         </header>
-
+        
         <div class="prose">
           <Content />
           {
