@@ -17,6 +17,12 @@
     "moreTitle": "Más de mí",
     "featured": "Destacado"
   },
+  "protect": {
+    "kicker": "Ups...",
+    "headline": "Product designer.",
+    "sub": "No tienes permiso para acceder a este archivo",
+    "ctaProjects": "Ir a mis proyectos"
+  },
   "projects": {
     "title": "Proyectos",
     "intro": "",

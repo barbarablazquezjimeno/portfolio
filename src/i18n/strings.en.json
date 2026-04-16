@@ -16,6 +16,12 @@
     "ctaContact": "Contact",
     "featured": "Featured"
   },
+  "protect": {
+    "kicker": "Ups...",
+    "headline": "Product designer.",
+    "sub": "Not permission",
+    "ctaProjects": "Go to projects"
+  },
   "projects": {
     "title": "Projects",
     "intro": "Case studies. Edit or add files under content/projects/en/.",
@@ -66,7 +72,7 @@
     "externalLink": "Opens in a new tab",
     "notFoundTitle": "Page not found",
     "notFoundBody": "This page does not exist or has moved.",
-    "notFoundHomeEs": "",
+    "notFoundHomeEs": "Ir a pagina principal en español",
     "notFoundHomeEn": "Go to English home",
     "notFoundNavLabel": "Home links by language",
     "viewCaseInEnglish": "View this case in English",

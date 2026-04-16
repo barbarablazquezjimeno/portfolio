@@ -31,7 +31,6 @@ const coverSrc = entry.data.cover
   : undefined;
 const coverAlt = entry.data.coverAlt ?? "";
 const titleId = `case-title-${slug}`;
-const internalUrl = pathForLocale(lang, "/projects/detailpage");
 
 // Build TOC
 const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);

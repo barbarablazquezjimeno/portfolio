@@ -9,7 +9,7 @@ cover: https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&
 coverAlt: Operativa logística en almacén
 skills: ["Figma", "User Research", "Prototyping"]
 cta: "Ver caso de logística"
-internalLabel: "jj"
+internalLabel: "Abrir Case Study"
 ---
 
 ## Contexto
