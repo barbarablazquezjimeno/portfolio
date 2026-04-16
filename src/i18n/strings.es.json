@@ -18,10 +18,9 @@
     "featured": "Destacado"
   },
   "protect": {
-    "kicker": "Ups...",
-    "headline": "Product designer.",
-    "sub": "No tienes permiso para acceder a este archivo",
-    "ctaProjects": "Ir a mis proyectos"
+    "headline": " Vaya...",
+    "sub": "No tienes permiso para acceder a este archivo, pero no te preocupes, ¡aún puedes explorar más proyectos!",
+    "ctaProjects": "Volver a mis proyectos"
   },
   "projects": {
     "title": "Proyectos",

@@ -2,30 +2,23 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';  
 import Button from '@/components/Button.astro';
 import ThemedIcon from '@/components/ThemedIcon.astro';
-import { ui, pathForLocale } from '@/i18n/ui';
+import { ui, pathForLocale, lang } from '@/i18n/ui';
 
-
-interface Props {
-  lang: Locale;
-}
-
-const { lang } = Astro.props;
 const te = ui.es;
-const t = ui[lang];
 ---
 
-<BaseLayout lang="es" title={`protect — ${te.metaTitle}`} description={te.a11y.notFoundBody}>
+<BaseLayout lang="es" title={te.metaTitle} description={te.a11y.notFoundBody}>
   <section id="top-protect" class=" protect protect--editorial protect--parallax" aria-labelledby="protect-title">
       <div class="protect__bg" aria-hidden="true"></div>
       <div class="shell protect__inner protect-animate">
-        <p class="protect__kicker">{t.protect.kicker}</p>
-        <h1 id="protect-title" class="protect__title">{t.protect.headline}</h1>
-        <p class="protect__sub">{t.protect.sub}</p>
+        <ThemedIcon name="padlock" size="100" />
+        <h1 id="protect-title" class="protect__title">{te.protect.headline}</h1>
+        <p class="protect__sub">{te.protect.sub}</p>
         <div class="protect__actions">
-          <Button variant="primary" href={pathForLocale(lang, 'projects')}>{t.protect.ctaProjects}</Button>
+          <Button variant="primary" href={pathForLocale(lang, 'projects')}>{te.protect.ctaProjects}</Button>
         </div>
       </div>
-  </section>
+    </section>
 </BaseLayout>
 
 <style>
@@ -100,21 +93,12 @@ const t = ui[lang];
     margin: 0 auto;
   }
 
-  .protect__kicker {
-    margin: 0 0 var(--space-md);
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
 
   .protect__title {
     margin: 0 0 var(--space-lg);
     font-family: var(--font-display);
     font-size: clamp(3.5rem, 12vw, 8.5rem);
-    font-weight: 500;
+    font-weight: 100;
     line-height: 1;
     letter-spacing: -0.04em;
     max-width: 100%;
