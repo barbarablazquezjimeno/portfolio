@@ -17,7 +17,7 @@ export const ui = {
 } as const;
 
 /** One-page anchors per locale (single HTML document per language). */
-export function pathForLocale(locale: Locale, page: 'home' | 'projects' | 'about' | 'contact' | 'root' | 'protect'): string {
+export function pathForLocale(locale: Locale, page: 'home' | 'projects' | 'about' | 'contact' | 'root'): string {
   const base = import.meta.env.BASE_URL || '/';
   const root = base.endsWith('/') ? base : `${base}/`;
   const home = `${root}${locale}/`;

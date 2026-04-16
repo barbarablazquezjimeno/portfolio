@@ -2,7 +2,13 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';  
 import Button from '@/components/Button.astro';
 import ThemedIcon from '@/components/ThemedIcon.astro';
-import { ui, pathForLocale, lang } from '@/i18n/ui';
+import { ui, pathForLocale, type Locale } from '@/i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
 
 const te = ui.es;
 ---
@@ -15,7 +21,9 @@ const te = ui.es;
         <h1 id="protect-title" class="protect__title">{te.protect.headline}</h1>
         <p class="protect__sub">{te.protect.sub}</p>
         <div class="protect__actions">
-          <Button variant="primary" href={pathForLocale(lang, 'projects')}>{te.protect.ctaProjects}</Button>
+          <Button variant="primary" 
+          href={pathForLocale(lang, 'root')}>{te.protect.ctaProjects}
+        </Button>
         </div>
       </div>
     </section>
