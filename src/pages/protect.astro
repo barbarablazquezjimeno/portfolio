@@ -4,11 +4,6 @@ import Button from '@/components/Button.astro';
 import ThemedIcon from '@/components/ThemedIcon.astro';
 import { ui, pathForLocale, type Locale } from '@/i18n/ui';
 
-interface Props {
-  lang: Locale;
-}
-
-const { lang } = Astro.props;
 
 const te = ui.es;
 ---
@@ -22,7 +17,9 @@ const te = ui.es;
         <p class="protect__sub">{te.protect.sub}</p>
         <div class="protect__actions">
           <Button variant="primary" 
-          href={pathForLocale(lang, 'root')}>{te.protect.ctaProjects}
+          href={pathForLocale('es', 'projects')}
+          >
+          {te.protect.ctaProjects}
         </Button>
         </div>
       </div>
