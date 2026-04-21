@@ -6,7 +6,6 @@ interface Props {
   type?: "button" | "submit" | "reset";
   variant?: "primary" | "secondary" | "ghost";
   children?: string | undefined;
-  icon?: string;
   class?: string;
   id?: string;
   'aria-label'?: string;
@@ -19,7 +18,6 @@ const {
   type = "button", 
   variant = "primary", 
   children,
-  icon, 
   class: customClass, 
   id,
   'aria-label': ariaLabel,
@@ -46,7 +44,12 @@ const buttonText = text ? marked.parseInline(text) : undefined;
   <span class="btn__text">
     {buttonText ? <Fragment set:html={buttonText} /> : <slot /> }
   </span>
-  {icon && <span class="btn__icon">{icon}</span>}
+
+  {Astro.slots.has("icon") && (
+  <span class="btn__icon">
+    <slot name="icon" />
+  </span>
+ )}
 </Component>
 
 <script>

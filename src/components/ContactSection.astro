@@ -17,19 +17,25 @@ const copyLabel = `${t.a11y.copyEmailFor} (${contactEmail})`;
 <section class="contact-section shell reveal" id="contact" aria-labelledby="contact-title">
   <h2 id="contact-title" class="contact-section__title">{t.contact.title}</h2>
   <p id="contact-intro" class="contact-section__intro">{t.contact.intro}</p>
-  <p class="contact-section__email">
-    <a href={`mailto:${contactEmail}`} aria-label={mailLabel}>{contactEmail}</a>
-  </p>
-  <Button
-    variant="ghost"
-    id="copy-email"
-    data-email={contactEmail}
-    data-copied={t.contact.copied}
-    aria-label={copyLabel}
-    aria-describedby="contact-intro"
-  >
-    {t.contact.copyEmail}
-  </Button>
+
+    <ul id="contact-email" class="contact-section__email">
+      <li>
+        <a href={`mailto:${contactEmail}`} aria-label={mailLabel}>{contactEmail} </a>
+      </li>
+
+      <li>
+        <Button
+        id="copy-email" 
+        variant= "secondary"
+        data-email={contactEmail}
+        data-copied={t.contact.copied}
+      >
+        <ThemedIcon name="copy" size="24"/>
+        </Button>
+      </li>
+    </ul> 
+
+
   <p id="copy-feedback" class="sr-only" aria-live="polite" aria-atomic="true"></p>
   {
     social.linkedin || social.behance ? (
@@ -43,7 +49,7 @@ const copyLabel = `${t.a11y.copyEmailFor} (${contactEmail})`;
                 target="_blank"
                 aria-label={`LinkedIn (${t.a11y.externalLink})`}
               >                
-                <ThemedIcon name="linkedin" size="100" />
+                <ThemedIcon name="linkedin" size="48" />
               </a>
             </li>
           ) : null}
@@ -55,7 +61,7 @@ const copyLabel = `${t.a11y.copyEmailFor} (${contactEmail})`;
                 target="_blank"
                 aria-label={`Behance (${t.a11y.externalLink})`}
               >
-                Behance
+                <ThemedIcon name="behance" size="48" />
               </a>
             </li>
           ) : null}
@@ -106,6 +112,10 @@ const copyLabel = `${t.a11y.copyEmailFor} (${contactEmail})`;
 
   .contact-section__email {
     margin: 0 0 var(--space-md);
+    padding: 0;
+    list-style: none;
+    display: flex;
+    gap: var(--space-md);
     font-size: 1.15rem;
     font-weight: 600;
     word-break: break-word;
