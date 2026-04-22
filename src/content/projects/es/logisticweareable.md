@@ -5,11 +5,11 @@ overline: WEARABLE
 date: 2024-09-01
 pairSlug: marketplace-filters
 featured: true
-cover: https://images.unsplash.com/photo-1556155092-490a1ba16284?auto=format&fit=crop&q=80&w=1200
+cover: /images/projects/Cover-Weareable.png
 coverAlt: Solución wearable para picking logístico
 skills: ["Figma", "User Research", "WatchOS/Android Wear"]
 cta: "Ver caso Logístic Wearable"
-internalLabel: "jj"
+internalLabel: "Explorar Archivo Figma"
 ---
 
 ## Contexto

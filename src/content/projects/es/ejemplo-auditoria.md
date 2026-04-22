@@ -5,7 +5,7 @@ date: 2026-01-15
 overline: WEB | APP
 pairSlug: onboarding-banking
 featured: true
-cover:  /images/projects/Accesibilidad.png
+cover:  /images/projects/Cover-accesibility.png
 coverAlt: Portada referente a un análisis de accesibilidad
 skills: ["WCAG2", "ACCESIBILIDAD", "AUDITORIA"]
 cta: "Ver análisis"
