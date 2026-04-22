@@ -16,10 +16,21 @@
     "ctaContact": "Contact",
     "featured": "Featured"
   },
+  "protect": {
+    "headline": "Product designer.",
+    "sub": "Not permission",
+    "ctaProjects": "Go to projects"
+  },
   "projects": {
     "title": "Projects",
     "intro": "Case studies. Edit or add files under content/projects/en/.",
-    "back": "Back to home"
+    "back": "Back to home",
+    "behanceCta": {
+      "title": "Want to see more?",
+      "lead": "Explore more work on my Behance.",
+      "button": "View on Behance",
+      "buttonAria": "View more projects on Behance (opens in a new tab)"
+    }
   },
   "projectDetail": {
     "problem": "Problem",
@@ -33,8 +44,7 @@
     "title": "Contact",
     "intro": "For collaborations or speaking, email:",
     "copyEmail": "Copy email",
-    "copied": "Copied",
-    "socialHeading": "Links & social"
+    "copied": "Copied"
   },
   "footer": {
     "rights": "All rights reserved."
@@ -61,7 +71,7 @@
     "externalLink": "Opens in a new tab",
     "notFoundTitle": "Page not found",
     "notFoundBody": "This page does not exist or has moved.",
-    "notFoundHomeEs": "",
+    "notFoundHomeEs": "Ir a pagina principal en español",
     "notFoundHomeEn": "Go to English home",
     "notFoundNavLabel": "Home links by language",
     "viewCaseInEnglish": "View this case in English",

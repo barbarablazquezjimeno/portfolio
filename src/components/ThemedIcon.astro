@@ -1,0 +1,45 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  name: string;        
+  size?: string;      
+  class?: string;     
+}
+
+const { name, size = "24", class: className = "", ...rest } = Astro.props;
+---
+
+<span class={`themed-icon ${className}`} {...rest}>
+  <!-- Busca automáticamente en src/icons/light/ y src/icons/dark/ -->
+  <Icon name={`light/${name}`} size={size} class="icon-light" />
+  <Icon name={`dark/${name}`} size={size} class="icon-dark" />
+</span>
+
+<style>
+  .themed-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-dark {
+    display: none;
+  }
+  .icon-light {
+    display: block;
+  }
+
+  /* 
+   * Tema Oscuro (Dark Mode):
+   * Cuando el sistema cambia a oscuro, invertimos qué icono se muestra 
+   */
+  @media (prefers-color-scheme: dark) {
+    .icon-light { 
+      display: none; 
+    }
+    .icon-dark { 
+      display: block; 
+    }
+  }
+</style>

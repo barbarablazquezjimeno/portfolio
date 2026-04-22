@@ -1,0 +1,151 @@
+---
+import Button from '@/components/Button.astro';
+import ThemedIcon from '@/components/ThemedIcon.astro';
+import { ui, type Locale } from '@/i18n/ui';
+import { contactEmail, social } from '@/data/site';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+const mailLabel = `${t.a11y.contactEmailLabel}: ${contactEmail}`;
+const copyLabel = `${t.a11y.copyEmailFor} (${contactEmail})`;
+---
+
+<section class="contact-section shell reveal" id="contact" aria-labelledby="contact-title">
+  <h2 id="contact-title" class="contact-section__title">{t.contact.title}</h2>
+  <p id="contact-intro" class="contact-section__intro">{t.contact.intro}</p>
+
+    <ul id="contact-email" class="contact-section__email">
+      <li>
+        <a href={`mailto:${contactEmail}`} aria-label={mailLabel}>{contactEmail} </a>
+      </li>
+
+      <li>
+        <Button
+        id="copy-email" 
+        variant= "secondary"
+        data-email={contactEmail}
+        data-copied={t.contact.copied}
+      >
+        <ThemedIcon name="copy" size="24"/>
+        </Button>
+      </li>
+    </ul> 
+
+
+  <p id="copy-feedback" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+  {
+    social.linkedin || social.behance ? (
+      <>
+        <ul class="contact-section__social">
+          {social.linkedin ? (
+            <li>
+              <a
+                href={social.linkedin}
+                rel="noopener noreferrer"
+                target="_blank"
+                aria-label={`LinkedIn (${t.a11y.externalLink})`}
+              >                
+                <ThemedIcon name="linkedin" size="48" />
+              </a>
+            </li>
+          ) : null}
+          {social.behance ? (
+            <li>
+              <a
+                href={social.behance}
+                rel="noopener noreferrer"
+                target="_blank"
+                aria-label={`Behance (${t.a11y.externalLink})`}
+              >
+                <ThemedIcon name="behance" size="48" />
+              </a>
+            </li>
+          ) : null}
+        </ul>
+      </>
+    ) : null
+  }
+</section>
+
+<script>
+  const btn = document.getElementById('copy-email');
+  const feedback = document.getElementById('copy-feedback');
+  btn?.addEventListener('click', async () => {
+    const email = btn.getAttribute('data-email');
+    const copied = btn.getAttribute('data-copied') ?? '';
+    if (!email || !feedback) return;
+    try {
+      await navigator.clipboard.writeText(email);
+      feedback.textContent = copied;
+      window.setTimeout(() => {
+        feedback.textContent = '';
+      }, 3000);
+    } catch {
+      feedback.textContent = '';
+    }
+  });
+</script>
+
+<style>
+  .contact-section {
+    padding: var(--space-3xl) 0 calc(var(--space-3xl) + var(--space-lg));
+    border-top: 1px solid var(--border);
+    max-width: var(--editorial-width);
+  }
+
+  .contact-section__title {
+    margin: 0 0 var(--space-md);
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.5vw, 2.65rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .contact-section__intro {
+    margin: 0 0 var(--space-sm);
+    color: var(--text-muted);
+  }
+
+  .contact-section__email {
+    margin: 0 0 var(--space-md);
+    padding: 0;
+    list-style: none;
+    display: flex;
+    gap: var(--space-md);
+    font-size: 1.15rem;
+    font-weight: 600;
+    word-break: break-word;
+  }
+
+  .contact-section__email a {
+    text-decoration: none;
+  }
+
+  .contact-section__subhead {
+    margin: var(--space-xl) 0 var(--space-sm);
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+  }
+
+  .contact-section__social {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  .contact-section__social a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>

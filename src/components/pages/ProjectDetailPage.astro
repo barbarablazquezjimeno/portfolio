@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { render, type CollectionEntry } from 'astro:content';
-import { ui, pathForLocale, projectDetailPath, otherLocale, type Locale } from '@/i18n/ui';
-import { findProjectTranslation, projectSlugFromId } from '@/lib/projects';
+import CaseSection from '@/components/CaseSection.astro';
+import type { Locale } from '@/i18n/ui';
+import { ui } from '@/i18n/ui';
+import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   lang: Locale;
@@ -10,145 +11,18 @@ interface Props {
 }
 
 const { lang, entry } = Astro.props;
-const { Content } = await render(entry);
 const t = ui[lang];
-const other = otherLocale(lang);
-const alt = await findProjectTranslation(entry.data.pairSlug, other);
-const altSlug = alt ? projectSlugFromId(alt.id, other) : null;
-const altLabel = lang === 'es' ? t.a11y.viewCaseInEnglish : t.a11y.viewCaseInSpanish;
 ---
 
 <BaseLayout lang={lang} title={`${entry.data.title} — ${t.metaTitle}`} description={entry.data.description}>
-  <article class="shell article">
-    <header class="article__head">
-      <a class="back" href={pathForLocale(lang, 'projects')} aria-label={t.a11y.backToProjects}>
-        ← {t.nav.projects}
-      </a>
-      <p class="article__meta">
-        <time datetime={entry.data.date.toISOString().slice(0, 10)}>{entry.data.date.getFullYear()}</time>
-      </p>
-      <h1 class="article__title">{entry.data.title}</h1>
-      <p class="article__lede">{entry.data.description}</p>
-      {
-        alt && altSlug && (
-          <p class="article__alt">
-            <a href={projectDetailPath(other, altSlug)} hreflang={other} lang={other}>
-              {altLabel}
-            </a>
-          </p>
-        )
-      }
-    </header>
-    <div class="prose">
-      <Content />
-      {entry.data.problem && (
-        <section class="project-detail__section">
-          <h2 class="project-detail__section-title">{t.projectDetail.problem}</h2>
-          <p class="project-detail__section-text">{entry.data.problem}</p>
-        </section>
-      )}
-      {entry.data.solution && (
-        <section class="project-detail__section">
-          <h2 class="project-detail__section-title">{t.projectDetail.solution}</h2>
-          <p class="project-detail__section-text">{entry.data.solution}</p>
-        </section>
-      )}
-      {entry.data.tools && entry.data.tools.length > 0 && (
-        <section class="project-detail__section">
-          <h2 class="project-detail__section-title">{t.projectDetail.tools}</h2>
-          <ul class="project-detail__tools">
-            {entry.data.tools.map((tool) => (
-              <li class="project-detail__tool">{tool}</li>
-            ))}
-          </ul>
-        </section>
-      )}
-    </div>
-  </article>
+  <div id="project-detail" class="project-detail-page">
+    <CaseSection lang={lang} entry={entry} />
+  </div>
 </BaseLayout>
 
 <style>
-  .article {
-    max-width: 48rem;
-  }
-
-  .article__head {
-    margin-bottom: var(--space-xl);
-  }
-
-  .back {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--tap-min);
-    margin-bottom: var(--space-md);
-    font-weight: 600;
-    text-decoration: none;
-    color: var(--text-muted);
-  }
-
-  .back:hover {
-    color: var(--accent);
-  }
-
-  .article__meta {
-    margin: 0 0 var(--space-xs);
-    font-size: 0.8rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  .article__title {
-    margin: 0 0 var(--space-sm);
-    font-family: var(--font-display);
-    font-size: clamp(1.75rem, 3vw, 2.35rem);
-    font-weight: 600;
-    line-height: 1.15;
-  }
-
-  .article__lede {
-    margin: 0;
-    font-size: 1.1rem;
-    color: var(--text-muted);
-  }
-
-  .article__alt {
-    margin: var(--space-md) 0 0;
-    font-size: 0.95rem;
-  }
-
-  .project-detail__section {
-    margin-top: var(--space-xl);
-    margin-bottom: var(--space-lg);
-  }
-
-  .project-detail__section-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: var(--space-xs);
-    color: var(--text);
-  }
-
-  .project-detail__section-text {
-    font-size: 1rem;
-    color: var(--text-muted);
-    margin: 0 0 var(--space-md) 0;
-  }
-
-  .project-detail__tools {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-xs);
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .project-detail__tool {
-    background: var(--border);
-    border-radius: 6px;
-    padding: 0.25rem 0.65rem;
-    font-size: 0.95rem;
-    color: var(--text-muted);
+  .project-detail-page {
+    min-height: 50vh;
+    margin-top: calc(-1 * var(--space-lg));
   }
 </style>

@@ -1,1 +1,0 @@
-Temporal file to trigger directory listing and enable file deletion.

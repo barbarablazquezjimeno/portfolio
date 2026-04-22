@@ -1,0 +1,142 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';  
+import Button from '@/components/Button.astro';
+import ThemedIcon from '@/components/ThemedIcon.astro';
+import { ui, pathForLocale, type Locale } from '@/i18n/ui';
+
+
+const te = ui.es;
+---
+
+<BaseLayout lang="es" title={te.metaTitle} description={te.a11y.notFoundBody}>
+  <section id="top-protect" class=" protect protect--editorial protect--parallax" aria-labelledby="protect-title">
+      <div class="protect__bg" aria-hidden="true"></div>
+      <div class="shell protect__inner protect-animate">
+        <ThemedIcon name="padlock" size="100" />
+        <h1 id="protect-title" class="protect__title">{te.protect.headline}</h1>
+        <p class="protect__sub">{te.protect.sub}</p>
+        <div class="protect__actions">
+          <Button variant="primary" 
+          href={pathForLocale('es', 'projects')}
+          >
+          {te.protect.ctaProjects}
+        </Button>
+        </div>
+      </div>
+    </section>
+</BaseLayout>
+
+<style>
+  .protect--parallax {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .protect__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  }
+
+  .protect__bg::before,
+  .protect__bg::after {
+    content: '';
+    position: absolute;
+    width: 50vw;
+    height: 50vw;
+    border-radius: 50%;
+    filter: blur(6vw);
+    animation: aiFloat 18s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
+    opacity: 0.4;
+  }
+
+  .protect__bg::before {
+    background: color-mix(in oklab, var(--text) 12%, transparent);
+    top: -15vw;
+    left: -10vw;
+  }
+
+  .protect__bg::after {
+    background: color-mix(in oklab, var(--text) 8%, transparent);
+    bottom: 10vw;
+    right: -10vw;
+    animation-delay: -9s;
+  }
+
+  @keyframes aiFloat {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(8vw, 6vw) scale(1.15); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .protect__bg::before,
+    .protect__bg::after {
+      animation: none;
+    }
+  }
+
+  .protect--editorial {
+    padding: clamp(3rem, 10vw, 5rem) 0 clamp(4rem, 12vw, 7rem);
+    min-height: min(88vh, 920px);
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .protect__inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+
+  .protect__title {
+    margin: 0 0 var(--space-lg);
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 12vw, 8.5rem);
+    font-weight: 100;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    max-width: 100%;
+    padding-bottom: 0.1em;
+    /* AI Gradient Text */
+    background: linear-gradient(135deg, var(--text) 30%, color-mix(in oklab, var(--text) 40%, transparent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .protect__sub {
+    margin: 0 0 var(--space-xl);
+    font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: var(--editorial-width);
+  }
+
+  .protect__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (min-width: 40rem) {
+    .notfound__list {
+      flex-direction: row;
+      justify-content: center;
+      gap: var(--space-lg);
+    }
+  }
+</style>

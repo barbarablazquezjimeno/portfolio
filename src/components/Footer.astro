@@ -20,8 +20,9 @@ const year = new Date().getFullYear();
 <style>
   .footer {
     border-top: 1px solid var(--border);
-    padding: var(--space-lg) var(--space-md);
-    margin-top: var(--space-2xl);
+    padding: var(--space-xl) var(--space-md) var(--space-2xl);
+    margin-top: var(--space-3xl);
+    background: linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--bg-wash) 40%, var(--bg)) 100%);
   }
 
   .footer__inner {
@@ -37,7 +38,8 @@ const year = new Date().getFullYear();
   .footer__copy {
     margin: 0;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
   }
 
   .footer__link {

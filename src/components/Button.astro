@@ -4,14 +4,13 @@ import { marked } from 'marked';
 interface Props {
   href?: string;
   type?: "button" | "submit" | "reset";
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "ghost";
   children?: string | undefined;
-  icon?: string;
   class?: string;
   id?: string;
   'aria-label'?: string;
   title?: string;
-  text?: string; // Nuevo campo para texto en markdown
+  text?: string; // Optional markdown string rendered as inline HTML
 }
 
 const { 
@@ -19,7 +18,6 @@ const {
   type = "button", 
   variant = "primary", 
   children,
-  icon, 
   class: customClass, 
   id,
   'aria-label': ariaLabel,
@@ -46,35 +44,88 @@ const buttonText = text ? marked.parseInline(text) : undefined;
   <span class="btn__text">
     {buttonText ? <Fragment set:html={buttonText} /> : <slot /> }
   </span>
-  {icon && <span class="btn__icon">{icon}</span>}
+
+  {Astro.slots.has("icon") && (
+  <span class="btn__icon">
+    <slot name="icon" />
+  </span>
+ )}
 </Component>
+
+<script>
+  // Magnetic Button Effect
+  function initMagneticButtons() {
+    const buttons = document.querySelectorAll('.btn--primary, .btn--ghost');
+    
+    buttons.forEach((btn) => {
+      if (!(btn instanceof HTMLElement)) return;
+      
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        
+        // Move button slightly towards cursor
+        btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+      });
+      
+      btn.addEventListener('mouseleave', () => {
+        // Reset position with a spring-like feel (handled by CSS transition)
+        btn.style.transform = '';
+      });
+    });
+  }
+
+  initMagneticButtons();
+  document.addEventListener('astro:after-swap', initMagneticButtons);
+</script>
 
 <style>
   .btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
+    min-height: var(--tap-min);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     text-decoration: none;
+    border: 1px solid transparent;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 1rem;
   }
 
-  /* Primary variant: 2px border, no fill, black text */
+  /* Primary variant: filled */
   .btn--primary {
-    padding: var(--space-xs) var(--space-sm);
-    min-height: var(--tap-min);
-    color: var(--text);
-    border: 2px solid var(--text);
-    background: transparent;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+
+  .btn--primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--bg) 25%, transparent), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .btn--primary:hover::before {
+    transform: translateX(100%);
   }
 
   .btn--primary:hover {
-    background-color: var(--text);
-    color: var(--bg);
+    background: transparent;
+    color: var(--text);
+    box-shadow: 0 8px 24px color-mix(in oklab, var(--text) 15%, transparent);
   }
 
   .btn--primary:focus-visible {
@@ -108,6 +159,26 @@ const buttonText = text ? marked.parseInline(text) : undefined;
   }
 
   .btn--secondary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Ghost variant: border, no fill, text color */
+  .btn--ghost {
+    border-color: var(--border);
+    color: var(--text);
+    background: transparent;
+    backdrop-filter: blur(8px);
+  }
+
+  .btn--ghost:hover {
+    border-color: var(--text);
+    color: var(--text);
+    background: color-mix(in oklab, var(--text) 4%, transparent);
+    box-shadow: 0 8px 24px color-mix(in oklab, var(--text) 10%, transparent);
+  }
+
+  .btn--ghost:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }

@@ -2,43 +2,53 @@
   "metaTitle": "Portfolio — Product Designer",
   "metaDescription": "Casos de estudio y trayectoria como diseñador de producto.",
   "nav": {
-    "logo": "Portfolio",
+    "logo": "",
     "home": "Inicio",
     "projects": "Proyectos",
     "about": "Sobre mí",
     "contact": "Contacto"
   },
   "home": {
-    "kicker": "Bárbara Blazquez",
-    "headline": "Diseño enfocado en claridad, accesibilidad y resultados medibles.",
-    "sub": "Selección de trabajo reciente. Cada caso resume el problema, el proceso y el impacto.",
+    "kicker": "PORTFOLIO Bárbara Blázquez",
+    "headline": "Product designer.",
+    "sub": "Diseño experiencias accesibles pensando en personas,sistemas y futuro",
     "ctaProjects": "Ver mis proyectos",
     "ctaContact": "Contacto",
     "moreTitle": "Más de mí",
     "featured": "Destacado"
   },
+  "protect": {
+    "headline": " Ups...",
+    "sub": "No tienes permiso para acceder a este archivo, pero no te preocupes, ¡aún puedes explorar más proyectos!",
+    "ctaProjects": "Volver a mis proyectos"
+  },
   "projects": {
     "title": "Proyectos",
-    "intro": "Casos de estudio. Edita o añade archivos en content/projects/es/.",
-    "back": "Volver al inicio"
+    "intro": "",
+    "back": "Volver al inicio",
+    "behanceCta": {
+      "title": "¿Quieres ver más?",
+      "lead": "Explora más proyectos en mi Behance.",
+      "button": "Ver en Behance",
+      "buttonAria": "Ver más proyectos en Behance (abre en nueva pestaña)"
+    }
   },
   "projectDetail": {
-    "problem": "Problema",
+    "problem": "Problema UX",
     "solution": "Solución",
-    "tools": "Herramientas"
+    "tools": "Herramientas utilizadas"
   },
   "about": {
     "title": "Sobre mí"
   },
   "contact": {
     "title": "Contacto",
-    "intro": "Para colaboraciones o charlas, escribe a:",
+    "intro": "Puedes escribirme a:",
     "copyEmail": "Copiar email",
-    "copied": "Copiado",
-    "socialHeading": "Enlaces y redes"
+    "copied": "Copiado"
   },
   "footer": {
-    "rights": "Todos los derechos reservados."
+    "rights": ""
   },
   "lang": {
     "es": "ES",

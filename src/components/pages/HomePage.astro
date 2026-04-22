@@ -1,7 +1,10 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import ProjectExpandedRow from '@/components/ProjectExpandedRow.astro';
+import ExperienceTimeline from '@/components/ExperienceTimeline.astro';
 import Button from '@/components/Button.astro';
-import ProjectCardPreview from '@/components/ProjectCardPreview.astro';
+import ContactSection from '@/components/ContactSection.astro';
+import { getEntry, render } from 'astro:content';
 import { ui, pathForLocale, projectDetailPath, type Locale } from '@/i18n/ui';
 import { listProjects, projectSlugFromId } from '@/lib/projects';
 
@@ -11,68 +14,318 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = ui[lang];
-const featured = await listProjects(lang, { featuredOnly: true });
-const showcase = featured.length > 0 ? featured : (await listProjects(lang)).slice(0, 3);
+const items = await listProjects(lang);
+
+const aboutEntryId = lang === 'es' ? 'es/sobre-mi' : 'en/about';
+const aboutPage = await getEntry('sitePages', aboutEntryId);
+if (!aboutPage) {
+  throw new Error(`Missing content: src/content/sitePages/${aboutEntryId}.md`);
+}
+const { Content: AboutContent } = await render(aboutPage);
 ---
 
 <BaseLayout lang={lang} title={t.metaTitle} description={t.metaDescription}>
-  <div class="shell hero-container">
-    <section class="hero" aria-labelledby="hero-title">
-      <p class="hero__kicker">{t.home.kicker}</p>
-      <h1 id="hero-title" class="hero__title">{t.home.headline}</h1>
-      <p class="hero__sub">{t.home.sub}</p>
-      <div class="hero__actions">
-        <Button variant="primary" href={pathForLocale(lang, 'projects')}>
-          {t.home.ctaProjects}
-        </Button>
+  <div class="one-page" data-one-page>
+    <div class="scroll-progress-track" aria-hidden="true">
+      <div class="scroll-progress" id="scroll-progress"></div>
+    </div>
+    <section id="top" class="hero hero--editorial hero--parallax" aria-labelledby="hero-title">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="shell hero__inner hero-animate">
+        <p class="hero__kicker">{t.home.kicker}</p>
+        <h1 id="hero-title" class="hero__title">{t.home.headline}</h1>
+        <p class="hero__sub">{t.home.sub}</p>
+        <div class="hero__actions">
+          <Button variant="primary" href={pathForLocale(lang, 'projects')}>{t.home.ctaProjects}</Button>
+          <Button variant="ghost" href={pathForLocale(lang, 'contact')}>{t.home.ctaContact}</Button>
+        </div>
       </div>
     </section>
+
+    <section id="projects" class="shell projects-block projects-block--wash" aria-labelledby="projects-heading">
+      <header class="projects-block__head reveal">
+        <h2 id="projects-heading" class="projects-block__title">{t.projects.title}</h2>
+        <p class="projects-block__intro">{t.projects.intro}</p>
+      </header>
+      <div class="projects-list">
+        {
+          items.map((p, index) => {
+            const slug = projectSlugFromId(p.id, lang);
+            return (
+              <ProjectExpandedRow
+                href={projectDetailPath(lang, slug)}
+                title={p.data.title}
+                description={p.data.description}
+                overline={p.data.overline}
+                date={p.data.date}
+                cover={p.data.cover}
+                coverAlt={p.data.coverAlt}
+                cta={p.data.cta}
+                viewCaseLabel={t.a11y.viewCase}
+                index={index}
+                slug={slug}
+              />
+            );
+          })
+        }
+      </div>
+    </section>
+
+    <section id="about" class="shell about-block" aria-labelledby="about-heading">
+      <div class="about-block__intro reveal">
+        <h2 id="about-heading" class="about-block__title">{aboutPage.data.title}</h2>
+        <div class="prose">
+          <AboutContent />
+        </div>
+      </div>
+      <ExperienceTimeline lang={lang} />
+    </section>
+
+    <ContactSection lang={lang} />
   </div>
 </BaseLayout>
 
+<script is:inline>
+  function initHomeScroll() {
+    var progress = document.getElementById('scroll-progress');
+    var heroBg = document.querySelector('.hero__bg');
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function syncHomeScroll() {
+      var doc = document.documentElement;
+      var max = doc.scrollHeight - doc.clientHeight;
+      var t = max > 0 ? window.scrollY / max : 0;
+      if (progress) {
+        progress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, t)) + ')';
+      }
+      if (!reduced && heroBg) {
+        var y = Math.min(window.scrollY * 0.2, 96);
+        heroBg.style.transform = 'translate3d(0,' + y + 'px,0)';
+      }
+    }
+    syncHomeScroll();
+    window.addEventListener('scroll', syncHomeScroll, { passive: true });
+  }
+  initHomeScroll();
+  document.addEventListener('astro:after-swap', initHomeScroll);
+</script>
+
 <style>
-  .hero-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 200px); /* Ajuste aproximado para centrar verticalmente */
-    text-align: center;
+  .scroll-progress-track {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    z-index: 50;
+    pointer-events: none;
   }
 
-  .hero {
-    padding: var(--space-xl) 0;
-    max-width: 50rem;
+  .scroll-progress {
+    height: 100%;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: linear-gradient(90deg, color-mix(in oklab, var(--text-muted) 70%, var(--text)), var(--text));
+  }
+
+  .hero--parallax {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  }
+
+  .hero__bg::before,
+  .hero__bg::after {
+    content: '';
+    position: absolute;
+    width: 50vw;
+    height: 50vw;
+    border-radius: 50%;
+    filter: blur(6vw);
+    animation: aiFloat 18s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
+    opacity: 0.4;
+  }
+
+  .hero__bg::before {
+    background: color-mix(in oklab, var(--text) 12%, transparent);
+    top: -15vw;
+    left: -10vw;
+  }
+
+  .hero__bg::after {
+    background: color-mix(in oklab, var(--text) 8%, transparent);
+    bottom: 10vw;
+    right: -10vw;
+    animation-delay: -9s;
+  }
+
+  @keyframes aiFloat {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(8vw, 6vw) scale(1.15); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__bg::before,
+    .hero__bg::after {
+      animation: none;
+    }
+  }
+
+  .hero--editorial {
+    padding: clamp(3rem, 10vw, 5rem) 0 clamp(4rem, 12vw, 7rem);
+    min-height: min(88vh, 920px);
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max);
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .projects-block--wash {
+    position: relative;
+  }
+
+  .projects-block--wash::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    top: -1px;
+    bottom: -1px;
+    z-index: -1;
+    background: radial-gradient(
+      ellipse 90% 80% at 50% 0%,
+      color-mix(in oklab, var(--bg-wash) 55%, transparent) 0%,
+      transparent 65%
+    );
+    pointer-events: none;
   }
 
   .hero__kicker {
-    margin: 0 0 var(--space-sm);
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    margin: 0 0 var(--space-md);
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--text-muted);
   }
 
   .hero__title {
-    margin: 0 0 var(--space-md);
+    margin: 0 0 var(--space-lg);
     font-family: var(--font-display);
-    font-size: clamp(2rem, 4.5vw, 2.85rem);
-    font-weight: 600;
-    line-height: 1.12;
+    font-size: clamp(3.5rem, 12vw, 8.5rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    max-width: 100%;
+    padding-bottom: 0.1em;
+    /* AI Gradient Text */
+    background: linear-gradient(135deg, var(--text) 30%, color-mix(in oklab, var(--text) 40%, transparent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .hero__sub {
-    margin: 0 0 var(--space-lg);
-    font-size: 1.1rem;
+    margin: 0 0 var(--space-xl);
+    font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+    font-weight: 400;
+    line-height: 1.65;
     color: var(--text-muted);
-    max-width: 36rem;
+    max-width: var(--editorial-width);
   }
 
   .hero__actions {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
-    gap: var(--space-sm
+    gap: var(--space-md);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .projects-block {
+    padding: var(--space-3xl) 0;
+    border-top: none;
+  }
+
+  .projects-block__head {
+    max-width: 48rem;
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .projects-block__title {
+    margin: 0 0 var(--space-md);
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 4.5vw, 3.25rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--text);
+  }
+
+  .projects-block__intro {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.65;
+    max-width: var(--editorial-width);
+  }
+
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+  }
+
+  /* Focus/Blur sibling effect on hover */
+  @media (min-width: 56rem) {
+    .projects-list:hover > :global(.proj-exp) {
+      opacity: 0.3;
+      filter: blur(3px);
+      transform: scale(0.98);
+      transition: opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease;
+    }
+    
+    .projects-list > :global(.proj-exp:hover) {
+      opacity: 1;
+      filter: blur(0);
+      transform: scale(1);
+      z-index: 2;
+    }
+  }
+
+  .about-block {
+    padding: var(--space-3xl) 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .about-block__intro .about-block__title {
+    margin: 0 0 var(--space-xl);
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+</style>

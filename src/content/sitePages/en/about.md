@@ -5,10 +5,7 @@ description: Background and how I work.
 
 I am a **product designer** focused on complex systems, accessibility, and close collaboration with engineering.
 
-## Experience
-
-- **2023 — present · Company X** — Product Designer. Discovery, prototyping, and design QA.
-- **2020 — 2023 · Studio Y** — UX/UI for retail and fintech work.
+Below you’ll find the **timeline** in more detail (on large screens, the sticky column on the left tracks the active step as you scroll).
 
 ## How I work
 

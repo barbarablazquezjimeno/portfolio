@@ -2,12 +2,13 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
+
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
-  schema: z.object({
+  schema: z
+  .object({
     title: z.string(),
     description: z.string(),
-    overline: z.string().optional(),
     date: z.coerce.date(),
     /** Same value in ES and EN pairs for language switching */
     pairSlug: z.string(),
@@ -15,19 +16,18 @@ const projects = defineCollection({
     cover: z.string().optional(),
     /** Short alt text for the cover (accessibility); omit only if the image is decorative */
     coverAlt: z.string().optional(),
+    overline: z.string().optional(),
+    cta: z.string().optional(),
+    externalUrl: z.string().url().optional(),
+    externalLabel: z.string().optional(),
+    internalLabel: z.string().optional(),
+    problem: z.string().optional(),
+    solution: z.string().optional(),
+    tools: z.array(z.string()).optional(),
+    skills: z.array(z.string()).optional(),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
-    /** UX problem statement for projectcard_default expandable view */
-    problem: z.string().optional(),
-    /** Solution applied for projectcard_default expandable view */
-    solution: z.string().optional(),
-    /** Texto personalizado para el botón CTA */
-    cta: z.string().optional(),
-    /** Array of tools/software used (e.g. ["Figma", "Framer", "Google Analytics"]) */
-    tools: z.array(z.string()).optional(),
-    /** Array of techniques/skills used (max 4) (e.g. ["User Research", "Design System", "Accessibility"]) */
-    skills: z.array(z.string()).optional(),
-  }),
+  })
 });
 
 const sitePages = defineCollection({
@@ -38,7 +38,25 @@ const sitePages = defineCollection({
   }),
 });
 
+/** Career timeline entries embedded in About (`content/experience/es/` and `en/`). */
+const experience = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/experience' }),
+  schema: z.object({
+    order: z.number(),
+    /** Unique across all experience files (ES and EN); Astro uses it as the entry id. Anchors: `exp-step-{slug}`. */
+    slug: z.string(),
+    range: z.string(),
+    title: z.string(),
+    subtitle: z.string(),
+    company: z.string(),
+    meta: z.string(),
+    draft: z.boolean().default(false),
+  }),
+});
+
 export const collections = {
   projects,
   sitePages,
+  experience,
 };
+

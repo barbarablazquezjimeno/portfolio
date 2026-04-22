@@ -1,20 +1,21 @@
 ---
 import ProjectDetailPage from '@/components/pages/ProjectDetailPage.astro';
-import { pathForLocale } from '@/i18n/ui';
-import { listProjects, getProjectBySlug, projectSlugFromId } from '@/lib/projects';
+import { listProjects, projectSlugFromId } from '@/lib/projects';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+}
 
 export async function getStaticPaths() {
   const items = await listProjects('en');
   return items.map((item) => ({
     params: { slug: projectSlugFromId(item.id, 'en') },
+    props: { entry: item },
   }));
 }
 
-const { slug } = Astro.params;
-const entry = slug ? await getProjectBySlug('en', slug) : undefined;
-if (!entry) {
-  return Astro.redirect(pathForLocale('en', 'projects'));
-}
+const { entry } = Astro.props;
 ---
 
 <ProjectDetailPage lang="en" entry={entry} />

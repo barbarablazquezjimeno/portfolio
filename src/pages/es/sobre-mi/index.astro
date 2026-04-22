@@ -1,5 +1,5 @@
 ---
-import AboutPage from '@/components/pages/AboutPage.astro';
+const base = import.meta.env.BASE_URL || '/';
+const root = base.endsWith('/') ? base : `${base}/`;
+return Astro.redirect(`${root}es/#about`, 301);
 ---
-
-<AboutPage lang="es" />

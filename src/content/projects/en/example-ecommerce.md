@@ -8,6 +8,8 @@ cover: https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&
 coverAlt: Logistics operations in a warehouse
 skills: ["Conversion Optimization", "A/B Testing", "Payment UX"]
 cta: "See checkout case"
+externalUrl: "https://www.behance.net/tu-perfil/proyecto"
+
 ---
 
 ## Problem
