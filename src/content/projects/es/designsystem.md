@@ -9,21 +9,13 @@ cover: /images/projects/Cover-ds.png
 coverAlt: Sistema de diseño
 skills: ["Process Design", "Lean", "UX Research"]
 externalUrl: "https://www.behance.net/tu-perfil/proyecto"
-externalLabel: "Ver caso en Behance"
+externalLabel: " "
 ---
 
 ## Contexto
    El proyecto nació cuando detectamos que la librería existente ya no reflejaba la realidad del producto. 
    Había **componentes duplicados**, decisiones **visuales inconsistentes** y una segunda librería que comenzaba a quedar obsoleta. En lugar de seguir acumulando parches, decidimos analizar ambas bases, definir un sistema común y construir una transición ordenada hacia una única librería mantenible.
 
-   | Fase | Acción | Resultado | 
-   |------|--------|-----------| 
-   | **Diagnóstico**  | Detectar problema | Visión clara del caos | 
-   | **Inventario**  | Recopilar componentes | Mapa completo del estado actual | 
-   | **Priorización**   | Definir foco inicial | CTAs, cards, menús listos |
-   | **Unificación**  | Normalizar base visual | Tipos y estilos coherentes | 
-   | **Documentación**  | Crear reglas de uso | Sistema fácil de adoptar | 
-   | **Migración**  | Transición progresiva | Equipos alineados |
 
 ## Enfoque
    **1. Alineación inicial:**
