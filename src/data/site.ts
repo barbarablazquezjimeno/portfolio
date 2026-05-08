@@ -3,6 +3,6 @@ export const contactEmail = 'bblazquezjimeno@gmail.com';
 
 /** Used by ContactSection and the Behance CTA on the projects index (if `behance` is non-empty). */
 export const social = {
-  linkedin: 'https://www.linkedin.com/in/tu-perfil',
-  behance: 'https://www.behance.net/tu-perfil',
+  linkedin: 'https://www.linkedin.com/in/barbarablazquezjimeno/',
+  behance: 'https://www.behance.net/barbarablazque',
 } as const;
