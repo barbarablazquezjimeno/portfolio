@@ -20,7 +20,7 @@ export const ui = {
 export function pathForLocale(locale: Locale, page: 'home' | 'projects' | 'about' | 'contact' | 'root' ): string {
   const base = import.meta.env.BASE_URL || '/';
   const root = base.endsWith('/') ? base : `${base}/`;
-  const home = `${root}${locale}/`;
+  const home = locale === 'es' ? `${root}` : `${root}en/`;
   if (page === 'root') return home;
   if (page === 'home') return `${home}#top`;
   if (page === 'projects') return `${home}#projects`;
@@ -32,7 +32,7 @@ export function pathForLocale(locale: Locale, page: 'home' | 'projects' | 'about
 export function projectDetailPath(locale: Locale, slug: string): string {
   const base = import.meta.env.BASE_URL || '/';
   const root = base.endsWith('/') ? base : `${base}/`;
-  const segment = locale === 'es' ? `es/proyectos/${slug}` : `en/projects/${slug}`;
+  const segment = locale === 'es' ? `proyectos/${slug}` : `en/projects/${slug}`;
   return `${root}${segment}/`;
 }
 

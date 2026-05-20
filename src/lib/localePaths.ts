@@ -18,18 +18,20 @@ export function withBasePath(relative: string, baseUrl: string): string {
 /** Map localized path to the same logical page in the other locale */
 export function swapLocaleInPath(relative: string, from: Locale, to: Locale): string {
   if (from === to) return relative;
+
   if (from === 'es' && to === 'en') {
     return relative
-      .replace(/^\/es\/proyectos\/([^/]+)\/?$/, '/en/projects/$1/')
-      .replace(/^\/es\/?$/, '/en/')
-      .replace(/^\/es\/proyectos\/?$/, '/en/projects/')
-      .replace(/^\/es\/sobre-mi\/?$/, '/en/about/')
-      .replace(/^\/es\/contacto\/?$/, '/en/contact/');
+      .replace(/^\/(?:es\/)?projects\/([^/]+)\/?$/, '/en/projects/$1/')
+      .replace(/^\/(?:es\/)?projects\/?$/, '/en/projects/')
+      .replace(/^\/(?:es\/)?sobre-mi\/?$/, '/en/about/')
+      .replace(/^\/(?:es\/)?contacto\/?$/, '/en/contact/')
+      .replace(/^\/(?:es\/)?$/, '/en/');
   }
+
   return relative
-    .replace(/^\/en\/projects\/([^/]+)\/?$/, '/es/proyectos/$1/')
-    .replace(/^\/en\/?$/, '/es/')
-    .replace(/^\/en\/projects\/?$/, '/es/proyectos/')
-    .replace(/^\/en\/about\/?$/, '/es/sobre-mi/')
-    .replace(/^\/en\/contact\/?$/, '/es/contacto/');
+    .replace(/^\/en\/projects\/([^/]+)\/?$/, '/proyectos/$1/')
+    .replace(/^\/en\/projects\/?$/, '/proyectos/')
+    .replace(/^\/en\/about\/?$/, '/#about')
+    .replace(/^\/en\/contact\/?$/, '/#contact')
+    .replace(/^\/en\/?$/, '/');
 }
