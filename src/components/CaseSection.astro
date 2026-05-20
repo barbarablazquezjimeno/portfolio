@@ -223,7 +223,8 @@ const allHeadings = [...tocHeadings, ...customSections];
         const target = document.getElementById(href.slice(1));
         if (target) {
           e.preventDefault();
-          target.scrollIntoView({ behavior: "smooth" });
+          // Jump instantly instead of smooth scrolling
+          target.scrollIntoView({ behavior: "auto" });
           if (window.history.replaceState) {
             window.history.replaceState(window.history.state, "", href);
           }

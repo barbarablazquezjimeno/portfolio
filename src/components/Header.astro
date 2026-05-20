@@ -129,14 +129,15 @@ function initHeaderScripts() {
         // Implement JS smooth scroll for anchor links so we don't need CSS scroll-behavior: smooth
         // which breaks Astro View Transitions back navigation.
         const href = link.getAttribute('href');
-        if (href && href.includes('#')) {
+              if (href && href.includes('#')) {
           const id = href.split('#')[1];
           const target = document.getElementById(id);
           if (target) {
             // Only prevent default if we are already on the same page
             if (window.location.pathname === href.split('#')[0] || href.startsWith('#')) {
               e.preventDefault();
-              target.scrollIntoView({ behavior: 'smooth' });
+                    // Jump instantly instead of smooth scrolling
+                    target.scrollIntoView({ behavior: 'auto' });
               
               // Update URL hash manually
               if (window.history.pushState) {

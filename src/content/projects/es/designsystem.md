@@ -2,7 +2,7 @@
 title: "Design system"
 description: "Optimización y creación de un Design System"
 date: 2023-09-01
-overline: MOVILE
+overline: MOBILE APP
 pairSlug: inditex-inventory
 featured: false
 cover: /images/projects/Cover-ds.png

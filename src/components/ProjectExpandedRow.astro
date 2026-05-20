@@ -131,9 +131,6 @@ const ctaText = cta ?? viewCaseLabel;
     will-change: transform;
   }
 
-  .proj-exp__link:hover .proj-exp__img {
-    transform: scale(1.2);
-  }
 
   @media (prefers-reduced-motion: reduce) {
     .proj-exp__img {
@@ -237,7 +234,9 @@ const ctaText = cta ?? viewCaseLabel;
   function initProjectEffects() {
     const rows = document.querySelectorAll('[data-project-row]');
     const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (isReduced || !rows.length) return;
+    // Disable JS interactions (parallax / tilt) when true
+    const DISABLE_INTERACTIONS = true;
+    if (DISABLE_INTERACTIONS || isReduced || !rows.length) return;
 
     // 1. Internal Parallax (Window Effect)
     let rafId: number | null = null;

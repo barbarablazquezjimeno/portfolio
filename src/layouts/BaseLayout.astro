@@ -145,7 +145,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       // Global Scroll Velocity Skew Effect
       function initScrollSkew() {
         const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (isReduced) return;
+        // Disable global scroll animations when true
+        const DISABLE_SCROLL_ANIMATIONS = true;
+        if (DISABLE_SCROLL_ANIMATIONS || isReduced) return;
 
         let lastScrollY = window.scrollY;
         let lastTime = performance.now();

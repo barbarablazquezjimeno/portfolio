@@ -83,6 +83,9 @@ const first = steps[0]?.entry.data;
     const root = document.querySelector('[data-experience-timeline]');
     if (!root) return;
 
+    // Disable only the scroll-based parallax/drift when true
+    const DISABLE_SCROLL_ANIMATIONS = true;
+
     const steps = Array.from(root.querySelectorAll<HTMLElement>('.exp-step'));
     const displayItems = Array.from(root.querySelectorAll<HTMLElement>('.exp__display-item'));
 
@@ -149,6 +152,7 @@ const first = steps[0]?.entry.data;
     // Parallax effect on scroll
     let rafId = 0;
     function onScroll() {
+      if (DISABLE_SCROLL_ANIMATIONS) return;
       if (rafId || !mqDesktop.matches || mqReduce.matches) return;
       rafId = requestAnimationFrame(() => {
         rafId = 0;
@@ -164,8 +168,10 @@ const first = steps[0]?.entry.data;
     function setup() {
       if (mqDesktop.matches) {
         steps.forEach((step) => observer.observe(step));
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll(); // initial parallax
+        if (!DISABLE_SCROLL_ANIMATIONS) {
+          window.addEventListener('scroll', onScroll, { passive: true });
+          onScroll(); // initial parallax
+        }
       } else {
         observer.disconnect();
         window.removeEventListener('scroll', onScroll);

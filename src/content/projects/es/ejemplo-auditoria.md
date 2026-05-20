@@ -2,7 +2,7 @@
 title: Auditoría accesibilidad web
 description: Revisión y auditoria de cumplimiento de WCAG2
 date: 2026-01-15
-overline: WEB | APP
+overline: WEB | MOBILE APP
 pairSlug: onboarding-banking
 featured: true
 cover:  /images/projects/Cover-accesibility.png
@@ -30,5 +30,3 @@ Se evaluaron componentes, patrones reutilizables y flujos críticos para identif
 
 La auditoría se enfocó en evaluar el cumplimiento de los criterios de accesibilidad WCAG 2.1 niveles A y AA desde una perspectiva funcional y de experiencia de usuario, analizando tipografía, contraste, navegación, interacción y entrada de datos.
 El resultado muestra un nivel de cumplimiento medio del 35%, con una base sólida en formularios y contenido dinámico, pero con carencias importantes en legibilidad, foco de navegación e interacción, que requieren rediseño prioritario.
-
-## Herramientas
